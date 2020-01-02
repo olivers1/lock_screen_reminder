@@ -77,10 +77,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\lock_screen_reminder;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\cores\arduino;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\variants\micro;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include-fixed;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include\avr;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.8.1\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.9.2\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.9.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\lock_screen_reminder;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\libraries\SPI\src;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\libraries\Wire\src;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\libraries\Wire\src\utility;$(ProjectDir)..\..\Arduino\libraries\Adafruit_SSD1306;$(ProjectDir)..\..\Arduino\libraries\Adafruit-GFX-Library-master;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\cores\arduino;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\arduino\avr\variants\micro;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\\lib\gcc\avr\7.3.0\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include-fixed;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\avr\include\avr;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.8.1\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.9.2\include;$(ProjectDir)..\..\..\..\..\Program Files\WindowsApps\ArduinoLLC.ArduinoIDE_1.8.21.0_x86__mdqgnx93n4wtt\hardware\tools\avr\lib\gcc\avr\4.9.3\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.lock_screen_reminder.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_atmega32u4__;__AVR_ATmega32U4__;__AVR_ATmega32u4__;F_CPU=16000000L;ARDUINO=10809;ARDUINO_AVR_MICRO;ARDUINO_ARCH_AVR;USB_VID=0x2341;USB_PID=0x8037;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_atmega32u4__;__AVR_ATmega32U4__;__AVR_ATmega32u4__;_VMDEBUG=1;F_CPU=16000000L;ARDUINO=10809;ARDUINO_AVR_MICRO;ARDUINO_ARCH_AVR;USB_VID=0x2341;USB_PID=0x8037;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -112,14 +112,22 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Actuator.h" />
+    <ClInclude Include="Core.h" />
+    <ClInclude Include="Sensor.h" />
     <ClInclude Include="__vm\.lock_screen_reminder.vsarduino.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Actuator.cpp" />
+    <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Sensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties config.Debug.customdebug_micro_debugger_type="universal" />
+      <UserProperties arduino.upload.port="COM10" config.Debug.customdebug_micro_debugger_type="universal" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
