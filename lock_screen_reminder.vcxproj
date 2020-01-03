@@ -113,11 +113,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h" />
+    <ClInclude Include="DistanceSensor.h" />
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="__vm\.lock_screen_reminder.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="DistanceSensor.cpp" />
     <ClCompile Include="LightSensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

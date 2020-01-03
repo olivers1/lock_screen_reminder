@@ -27,12 +27,18 @@
     <ClInclude Include="LightSensor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DistanceSensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LightSensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DistanceSensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

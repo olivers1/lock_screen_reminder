@@ -5,14 +5,14 @@
 class LightSensor
 {
 private:
-	unsigned int m_lightSensorPin;
-	unsigned int m_lightThreshold;
+	byte m_lightSensorPin;
+	byte m_lightThreshold;
 	bool m_isBelowThreshold;
 	int m_lightValue;
 
 	int ReadLight();
 public:
-	LightSensor(unsigned int, unsigned int);
+	LightSensor(byte, byte);
 	const bool GetLightStatus();
 	const int GetLightValue();
 };
