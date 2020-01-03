@@ -3,8 +3,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include "Core.h"
-#include "Sensor.h"
-#include "Actuator.h"
+#include "LightSensor.h"
+
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels

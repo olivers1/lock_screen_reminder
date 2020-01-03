@@ -112,15 +112,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actuator.h" />
     <ClInclude Include="Core.h" />
-    <ClInclude Include="Sensor.h" />
+    <ClInclude Include="LightSensor.h" />
     <ClInclude Include="__vm\.lock_screen_reminder.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actuator.cpp" />
     <ClCompile Include="Core.cpp" />
-    <ClCompile Include="Sensor.cpp" />
+    <ClCompile Include="LightSensor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
