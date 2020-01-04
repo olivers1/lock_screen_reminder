@@ -18,8 +18,9 @@ bool LightSensor::GetLightStatus()
 		m_isBelowThreshold = true;
 	}
 	else
+	{
 		m_isBelowThreshold = false;
-
+	}
 	return m_isBelowThreshold;
 }
 
