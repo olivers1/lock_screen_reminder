@@ -4,6 +4,7 @@
 #include <Adafruit_SSD1306.h>
 #include "Core.h"
 #include "LightSensor.h"
+#include "DistanceSensor.h"
 
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -23,6 +24,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define buzzerPin               6
 #define ledPin                  11
 
+const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
+unsigned long previousMillis = 0;
+
+
 enum class States : byte {  // enum with own namespace
     RESET = 0,
     WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
@@ -39,7 +44,25 @@ void setup() {
 }
 
 void loop() {
+    static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
+    static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
+
     unsigned long currentMillis = millis();
+
+    if (currentMillis - previousMillis >= TIME_INTERVAL_1)
+    {
+        previousMillis = currentMillis;
+
+        Serial.print("distanceValue: ");
+        Serial.println(distanceSensor.GetDistanceValue());
+        Serial.print("isAboveThreshold:  ");
+        Serial.println(distanceSensor.GetDistanceStatus(), DEC);
+
+        Serial.print("lightValue: ");
+        Serial.println(lightSensor.GetLightValue());
+        Serial.print("isBelowThreshold: ");
+        Serial.println(lightSensor.GetLightStatus(), DEC);
+    }
 }
 
 void InitializeDevices()

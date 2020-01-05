@@ -1,18 +1,17 @@
 #include "LightSensor.h"
 
-LightSensor::LightSensor(byte lightSensorPin, byte lightThreshold)
-	: m_lightSensorPin(lightSensorPin), m_lightThreshold(lightThreshold), m_isBelowThreshold(false), m_lightValue(-1) {}
+LightSensor::LightSensor(byte lightSensorPin, unsigned int lightThreshold)
+	: m_lightSensorPin(lightSensorPin), m_lightThreshold(lightThreshold), m_isBelowThreshold(false) {}
 	// m_lightValue set to '-1' mean no value has been read out
 
-byte LightSensor::ReadLight()
+unsigned int LightSensor::ReadLight()
 {
-	m_lightValue = analogRead(m_lightSensorPin);
-	return m_lightValue;
+	return analogRead(m_lightSensorPin);
 }
 
 bool LightSensor::GetLightStatus()
 {
-	byte lightValue = LightSensor::ReadLight();
+	unsigned int lightValue = LightSensor::ReadLight();
 	if (lightValue < m_lightThreshold)
 	{
 		m_isBelowThreshold = true;

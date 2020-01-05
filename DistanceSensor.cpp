@@ -1,7 +1,7 @@
 #include "DistanceSensor.h"
 
-DistanceSensor::DistanceSensor(byte ultrasonicTrigPin, byte ultrasonicEchoPin, byte distanceThreshold)
-	: m_ultrasonicTrigPin(ultrasonicTrigPin), m_ultrasonicEchoPin(ultrasonicEchoPin), m_distanceThreshold(distanceThreshold), m_isAboveThreshold(false), m_distanceValue(0) {}
+DistanceSensor::DistanceSensor(byte ultrasonicTrigPin, byte ultrasonicEchoPin, unsigned int distanceThreshold)
+	: m_ultrasonicTrigPin(ultrasonicTrigPin), m_ultrasonicEchoPin(ultrasonicEchoPin), m_distanceThreshold(distanceThreshold), m_isAboveThreshold(false) {}
 
 unsigned int DistanceSensor::ReadDistance()
 {
@@ -10,13 +10,15 @@ unsigned int DistanceSensor::ReadDistance()
     digitalWrite(m_ultrasonicTrigPin, HIGH);
     delayMicroseconds(10);
     digitalWrite(m_ultrasonicTrigPin, LOW);
-    m_distanceValue = (pulseIn(m_ultrasonicEchoPin, HIGH) / 2) / 29.1;     // convert measured time delay, into a centimeter value, it takes for waves to bounce back 
-    return m_distanceValue;
+    unsigned int distanceValue = (pulseIn(m_ultrasonicEchoPin, HIGH) / 2) / 29.1;     // convert measured time delay, into a centimeter value, it takes for waves to bounce back 
+    delay(10);      // delay to enable sequentional readouts, since arduino cpu executes code faster than the capability of the ultrasonic sensor
+    return distanceValue;
 }
 
 bool DistanceSensor::GetDistanceStatus()
 {
-    if (m_distanceValue > m_distanceThreshold)
+    unsigned int distanceValue = DistanceSensor::ReadDistance();
+    if (distanceValue > m_distanceThreshold)
     {
         m_isAboveThreshold = true;
     }

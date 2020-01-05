@@ -9,11 +9,11 @@ private:
 	const byte m_ultrasonicEchoPin;
 	const unsigned int m_distanceThreshold;
 	bool m_isAboveThreshold;
-	unsigned int m_distanceValue;
+	//unsigned int m_distanceValue;
 
 	unsigned int ReadDistance();
 public:
-	DistanceSensor(byte, byte, byte);
+	DistanceSensor(byte, byte, unsigned int);
 	bool GetDistanceStatus();
 	unsigned int GetDistanceValue();
 };
