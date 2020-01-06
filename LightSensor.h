@@ -8,7 +8,6 @@ private:
 	const byte m_lightSensorPin;
 	const unsigned int m_lightThreshold;
 	bool m_isBelowThreshold;
-	//unsigned int m_lightValue;
 
 	unsigned int ReadLight();
 public:

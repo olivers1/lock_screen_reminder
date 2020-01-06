@@ -2,7 +2,6 @@
 
 LightSensor::LightSensor(byte lightSensorPin, unsigned int lightThreshold)
 	: m_lightSensorPin(lightSensorPin), m_lightThreshold(lightThreshold), m_isBelowThreshold(false) {}
-	// m_lightValue set to '-1' mean no value has been read out
 
 unsigned int LightSensor::ReadLight()
 {

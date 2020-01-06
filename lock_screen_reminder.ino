@@ -5,7 +5,7 @@
 #include "Core.h"
 #include "LightSensor.h"
 #include "DistanceSensor.h"
-
+#include "StateRegisterHandler.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels
@@ -27,7 +27,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
 unsigned long previousMillis = 0;
 
-
 enum class States : byte {  // enum with own namespace
     RESET = 0,
     WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
@@ -39,11 +38,63 @@ enum class States : byte {  // enum with own namespace
     MASK = B11111111            // binary 1111'1111
 };
 
+States stateReg{ States::RESET };
+//States stateReg = States::RESET;
+
+inline constexpr States
+operator&(States x, States y)
+{
+    return static_cast<States>
+        (static_cast<byte>(x) & static_cast<byte>(y));
+}
+
+inline constexpr States
+operator|(States x, States y)
+{
+    return static_cast<States>
+        (static_cast<byte>(x) | static_cast<byte>(y));
+}
+
+inline constexpr States
+operator^(States x, States y)
+{
+    return static_cast<States>
+        (static_cast<byte>(x) ^ static_cast<byte>(y));
+}
+
+inline constexpr States
+operator~(States x)
+{
+    return static_cast<States>(~static_cast<int>(x));
+}
+
+inline States&
+operator&=(States& x, States y)
+{
+    x = x & y;
+    return x;
+}
+
+inline States&
+operator|=(States& x, States y)
+{
+    x = x | y;
+    return x;
+}
+
+inline States&
+operator^=(States& x, States y)
+{
+    x = x ^ y;
+    return x;
+}
+
 void setup() {
     InitializeDevices();
 }
 
 void loop() {
+    // instaciate senor objects
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
 
@@ -70,8 +121,6 @@ void InitializeDevices()
     // serial monitor
     Serial.begin(9600);
 
-    States stateReg{ States::RESET };
-    //States stateReg = States::RESET;
     unsigned long previousMillis = 0;
 
     // I/O-pins
