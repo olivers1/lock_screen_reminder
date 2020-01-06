@@ -12,11 +12,22 @@ private:
 	byte m_lightAboveCnt;
 	const byte m_nLightChecks;
 
+	enum States : byte {
+		RESET = 0,
+		WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
+		MONITOR_ON = 1 << 1,        // binary 0000'0010
+		TIMER_ENABLED = 1 << 2,     // binary 0000'0100
+		TIMER_FINISHED = 1 << 3,    // binary 0000'1000
+		ALARM_DISABLED = 1 << 4,    // binary 0001'0000
+		AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
+		MASK = B11111111            // binary 1111'1111
+	};
 	//void CheckFlagStateRegister(byte);	// maybe change to string parameter instead
-	//void SetFlagStateRegister(States);
+	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(byte);
 public:
 	StateRegisterHandler(byte, byte);
 	void CheckWorkplace();
+
 };
 

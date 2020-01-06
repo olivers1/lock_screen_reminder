@@ -3,14 +3,13 @@
 StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks)
 	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0)
 {
-    //States stateReg{ States::RESET };
-    States stateReg = States::RESET;
+    States stateReg = RESET;
 }
 
 
-//void StateRegisterHandler::SetFlagStateRegister(States state)
-//{
-    //States stateReg |= state;
+void StateRegisterHandler::SetFlagStateRegister(States state)
+{
+    States stateReg = state;
     /*
     RESET = 0,
         WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
@@ -21,7 +20,7 @@ StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChec
         AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
         MASK = B11111111            // binary 1111'1111
     */
-//}
+}
 
 
 /*
