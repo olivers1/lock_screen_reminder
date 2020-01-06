@@ -28,21 +28,6 @@ const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (millisec
 unsigned long previousMillis = 0;
 
 /*
-enum States : byte {
-    RESET = 0,
-    WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
-    MONITOR_ON = 1 << 1,        // binary 0000'0010
-    TIMER_ENABLED = 1 << 2,     // binary 0000'0100
-    TIMER_FINISHED = 1 << 3,    // binary 0000'1000
-    ALARM_DISABLED = 1 << 4,    // binary 0001'0000
-    AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
-    MASK = B11111111            // binary 1111'1111
-};
-
-States stateReg = RESET;
-*/
-
-/*
 enum class States : byte {  // enum with own namespace
     RESET = 0,
     WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
@@ -115,6 +100,7 @@ void loop() {
     // instaciate senor objects
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
+    static StateRegisterHandler stateReg(5, 5);
 
     unsigned long currentMillis = millis();
 
@@ -131,6 +117,8 @@ void loop() {
         Serial.println(lightSensor.GetLightValue());
         Serial.print("isBelowThreshold: ");
         Serial.println(lightSensor.GetLightStatus(), DEC);
+
+        stateReg.CheckWorkplace();
     }
 }
 

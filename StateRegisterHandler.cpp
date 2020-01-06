@@ -1,41 +1,46 @@
 #include "StateRegisterHandler.h"
 
 StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks)
-	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0)
+	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0), m_stateReg(RESET) {}
+
+
+void StateRegisterHandler::SetFlagStateRegister(States flag)
 {
-    States stateReg = RESET;
+	m_stateReg |= flag;
 }
 
-
-void StateRegisterHandler::SetFlagStateRegister(States state)
+void StateRegisterHandler::ClearFlagStateRegister(States flag)
 {
-    States stateReg = state;
-    /*
-    RESET = 0,
-        WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
-        MONITOR_ON = 1 << 1,        // binary 0000'0010
-        TIMER_ENABLED = 1 << 2,     // binary 0000'0100
-        TIMER_FINISHED = 1 << 3,    // binary 0000'1000
-        ALARM_DISABLED = 1 << 4,    // binary 0001'0000
-        AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
-        MASK = B11111111            // binary 1111'1111
-    */
+	m_stateReg &= (MASK ^ flag);
 }
 
+void StateRegisterHandler::CheckWorkplace()
+{
+	Serial.print("stateReg0: ");
+	Serial.println(m_stateReg);
 
-/*
-byte m_distanceAboveCnt;
-byte m_distanceBelowCnt;
-const byte m_nDistanceChecks;
-byte m_lightBelowCnt;
-byte m_lightAboveCnt;
-const byte m_nLightChecks;
-*/
+	SetFlagStateRegister(WORKPLACE_EMPTY);
+	Serial.print("stateReg1: ");
+	Serial.println(m_stateReg);
+	delay(5000);
 
-//void CheckFlagStateRegister(byte);	// maybe change to string parameter instead
+	SetFlagStateRegister(ALARM_DISABLED);
+	Serial.print("stateReg2: ");
+	Serial.println(m_stateReg);
+	delay(3000);
 
-void ClearFlagStateRegister(byte)
-{}
+	ClearFlagStateRegister(WORKPLACE_EMPTY);
+	Serial.print("stateReg3: ");
+	Serial.println(m_stateReg);
+	delay(3000);
 
-void CheckWorkplace()
-{}
+	SetFlagStateRegister(MONITOR_ON);
+	Serial.print("stateReg4: ");
+	Serial.println(m_stateReg);
+	delay(3000);
+
+	m_stateReg = RESET;
+	Serial.print("stateReg5: ");
+	Serial.println(m_stateReg);
+	delay(3000);
+}

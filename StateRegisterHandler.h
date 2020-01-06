@@ -11,6 +11,7 @@ private:
 	byte m_lightBelowCnt;
 	byte m_lightAboveCnt;
 	const byte m_nLightChecks;
+	byte m_stateReg;
 
 	enum States : byte {
 		RESET = 0,
@@ -22,12 +23,11 @@ private:
 		AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
 		MASK = B11111111            // binary 1111'1111
 	};
-	//void CheckFlagStateRegister(byte);	// maybe change to string parameter instead
+
 	void SetFlagStateRegister(States);
-	void ClearFlagStateRegister(byte);
+	void ClearFlagStateRegister(States);
 public:
 	StateRegisterHandler(byte, byte);
 	void CheckWorkplace();
-
 };
 
