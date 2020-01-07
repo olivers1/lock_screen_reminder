@@ -6,17 +6,7 @@
 
 class StateRegisterHandler
 {
-private:
-	const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (in milliseconds) program should loop
-	unsigned long previousMillis = 0;
-	byte m_distanceAboveCnt;
-	byte m_distanceBelowCnt;
-	const byte m_nDistanceChecks;
-	byte m_lightBelowCnt;
-	byte m_lightAboveCnt;
-	const byte m_nLightChecks;
-	byte m_stateReg;
-
+public:
 	enum States : byte {
 		RESET = 0,
 		WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
@@ -27,7 +17,16 @@ private:
 		AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
 		MASK = B11111111            // binary 1111'1111
 	};
-
+	const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (in milliseconds) program should loop
+	unsigned long previousMillis = 0;
+private:
+	byte m_distanceAboveCnt;
+	byte m_distanceBelowCnt;
+	const byte m_nDistanceChecks;
+	byte m_lightBelowCnt;
+	byte m_lightAboveCnt;
+	const byte m_nLightChecks;
+	byte m_stateReg;
 	DistanceSensor* m_distanceSensorObj;
 	LightSensor* m_lightSensorObj;
 
