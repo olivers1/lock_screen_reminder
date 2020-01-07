@@ -17,8 +17,6 @@ public:
 		AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
 		MASK = B11111111            // binary 1111'1111
 	};
-	const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (in milliseconds) program should loop
-	unsigned long previousMillis = 0;
 private:
 	byte m_distanceAboveCnt;
 	byte m_distanceBelowCnt;
@@ -35,4 +33,5 @@ private:
 public:
 	StateRegisterHandler(byte, byte, DistanceSensor*, LightSensor*);
 	void CheckWorkplace();
+	bool CheckFlagStateRegister(States);
 };

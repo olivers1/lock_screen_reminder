@@ -24,8 +24,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define buzzerPin               6
 #define ledPin                  11
 
-//const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
-//unsigned long previousMillis = 0;
+const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
+unsigned long previousMillis = 0;
 
 /*
 enum class States : byte {  // enum with own namespace
@@ -102,14 +102,14 @@ void loop() {
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
     static StateRegisterHandler stateReg(5, 5, &distanceSensor, &lightSensor);
 
-    //unsigned long currentMillis = millis();
+    unsigned long currentMillis = millis();
 
-    //if (currentMillis - previousMillis >= TIME_INTERVAL_1)
-    //{
-    //    previousMillis = currentMillis;
+    if (currentMillis - previousMillis >= TIME_INTERVAL_1)
+    {
+        previousMillis = currentMillis;
 
         stateReg.CheckWorkplace();
-    //}
+    }
 }
 
 void InitializeDevices()

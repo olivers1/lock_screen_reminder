@@ -16,45 +16,76 @@ void StateRegisterHandler::ClearFlagStateRegister(States flag)
 
 void StateRegisterHandler::CheckWorkplace()
 {
-	unsigned long currentMillis = millis();
-
-	if (currentMillis - previousMillis >= TIME_INTERVAL_1)
+	// check if workplace is empty and update stateRegister accordingly
+	if (m_distanceSensorObj->GetDistanceStatus())
 	{
-		previousMillis = currentMillis;
-		//while ((m_nDistanceChecks * 2) > 0)
-		//{
-		if (m_distanceSensorObj->GetDistanceStatus())
-		{
-			m_distanceAboveCnt++;
-			m_distanceBelowCnt = 0;
+		m_distanceAboveCnt++;
+		m_distanceBelowCnt = 0;
 
-			if (m_distanceAboveCnt == m_nDistanceChecks)
+		if (m_distanceAboveCnt == m_nDistanceChecks)
+		{
+			SetFlagStateRegister(WORKPLACE_EMPTY);
+			m_distanceAboveCnt = 0;		// reset counter
+		}
+	}
+	else
+	{
+		m_distanceBelowCnt++;
+		m_distanceAboveCnt = 0;
+
+		if (m_distanceBelowCnt == m_nDistanceChecks)
+		{
+			ClearFlagStateRegister(WORKPLACE_EMPTY);
+			m_distanceBelowCnt = 0;		// reset counter
+		}
+	}
+
+	// check if 'workplace empty' flag is set?
+	if (StateRegisterHandler::CheckFlagStateRegister(WORKPLACE_EMPTY))
+	{
+		// yes, 'workplace empty' flag is set
+		// read light sensor to check if external monitor is still on
+		if (m_lightSensorObj->GetLightStatus())
+		{
+			m_lightBelowCnt++;
+			m_lightAboveCnt = 0;
+			if (m_lightBelowCnt == m_nLightChecks)
 			{
-				SetFlagStateRegister(WORKPLACE_EMPTY);
-				m_distanceAboveCnt = 0;		// reset counter
+				// monitor is still on
+				SetFlagStateRegister(MONITOR_ON);	// updated flag in state register
+				m_lightBelowCnt = 0;	// reset counter
 			}
 		}
 		else
 		{
-			m_distanceBelowCnt++;
-			m_distanceAboveCnt = 0;
-
-			if (m_distanceBelowCnt == m_nDistanceChecks)
+			m_lightAboveCnt++;
+			m_lightBelowCnt = 0;
+			if (m_lightAboveCnt == m_nLightChecks)
 			{
-				ClearFlagStateRegister(WORKPLACE_EMPTY);
-				m_distanceBelowCnt = 0;		// reset counter
+				// monitor is turned off
+				ClearFlagStateRegister(MONITOR_ON);		// clear flag in state register
+				m_lightAboveCnt = 0;	// reset counter
 			}
 		}
-		//m_nDistanceChecks--;	
-	//}
-
-		Serial.print("stateReg: ");
-		Serial.println(m_stateReg);
-
-		Serial.print("m_distanceAboveCnt: ");
-		Serial.println(m_distanceAboveCnt);
-
-		Serial.print("m_distanceBelowCnt: ");
-		Serial.println(m_distanceBelowCnt);
 	}
+
+	Serial.print("stateReg: ");
+	Serial.println(m_stateReg);
+
+	Serial.print("m_distanceAboveCnt: ");
+	Serial.println(m_distanceAboveCnt);
+
+	Serial.print("m_distanceBelowCnt: ");
+	Serial.println(m_distanceBelowCnt);
+
+	Serial.print("m_lightBelowCnt: ");
+	Serial.println(m_lightBelowCnt);
+
+	Serial.print("m_lightAboveCnt: ");
+	Serial.println(m_lightAboveCnt);
+}
+
+bool StateRegisterHandler::CheckFlagStateRegister(States flag)
+{
+	return m_stateReg & flag;
 }
