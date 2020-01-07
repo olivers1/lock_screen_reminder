@@ -1,10 +1,14 @@
 #pragma once
 
 #include <Arduino.h>
+#include "DistanceSensor.h"
+#include "LightSensor.h"
 
 class StateRegisterHandler
 {
 private:
+	const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (in milliseconds) program should loop
+	unsigned long previousMillis = 0;
 	byte m_distanceAboveCnt;
 	byte m_distanceBelowCnt;
 	const byte m_nDistanceChecks;
@@ -24,10 +28,12 @@ private:
 		MASK = B11111111            // binary 1111'1111
 	};
 
+	DistanceSensor* m_distanceSensorObj;
+	LightSensor* m_lightSensorObj;
+
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
 public:
-	StateRegisterHandler(byte, byte);
+	StateRegisterHandler(byte, byte, DistanceSensor*, LightSensor*);
 	void CheckWorkplace();
 };
-

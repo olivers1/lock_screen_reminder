@@ -1,7 +1,7 @@
 #include "StateRegisterHandler.h"
 
-StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks)
-	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0), m_stateReg(RESET) {}
+StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj)
+	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceSensorObj(distanceSensorObj), m_lightSensorObj(lightSensorObj), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0), m_stateReg(RESET) {}
 
 
 void StateRegisterHandler::SetFlagStateRegister(States flag)
@@ -16,31 +16,45 @@ void StateRegisterHandler::ClearFlagStateRegister(States flag)
 
 void StateRegisterHandler::CheckWorkplace()
 {
-	Serial.print("stateReg0: ");
-	Serial.println(m_stateReg);
+	unsigned long currentMillis = millis();
 
-	SetFlagStateRegister(WORKPLACE_EMPTY);
-	Serial.print("stateReg1: ");
-	Serial.println(m_stateReg);
-	delay(5000);
+	if (currentMillis - previousMillis >= TIME_INTERVAL_1)
+	{
+		previousMillis = currentMillis;
+		//while ((m_nDistanceChecks * 2) > 0)
+		//{
+		if (m_distanceSensorObj->GetDistanceStatus())
+		{
+			m_distanceAboveCnt++;
+			m_distanceBelowCnt = 0;
 
-	SetFlagStateRegister(ALARM_DISABLED);
-	Serial.print("stateReg2: ");
-	Serial.println(m_stateReg);
-	delay(3000);
+			if (m_distanceAboveCnt == m_nDistanceChecks)
+			{
+				SetFlagStateRegister(WORKPLACE_EMPTY);
+				m_distanceAboveCnt = 0;		// reset counter
+			}
+		}
+		else
+		{
+			m_distanceBelowCnt++;
+			m_distanceAboveCnt = 0;
 
-	ClearFlagStateRegister(WORKPLACE_EMPTY);
-	Serial.print("stateReg3: ");
-	Serial.println(m_stateReg);
-	delay(3000);
+			if (m_distanceBelowCnt == m_nDistanceChecks)
+			{
+				ClearFlagStateRegister(WORKPLACE_EMPTY);
+				m_distanceBelowCnt = 0;		// reset counter
+			}
+		}
+		//m_nDistanceChecks--;	
+	//}
 
-	SetFlagStateRegister(MONITOR_ON);
-	Serial.print("stateReg4: ");
-	Serial.println(m_stateReg);
-	delay(3000);
+		Serial.print("stateReg: ");
+		Serial.println(m_stateReg);
 
-	m_stateReg = RESET;
-	Serial.print("stateReg5: ");
-	Serial.println(m_stateReg);
-	delay(3000);
+		Serial.print("m_distanceAboveCnt: ");
+		Serial.println(m_distanceAboveCnt);
+
+		Serial.print("m_distanceBelowCnt: ");
+		Serial.println(m_distanceBelowCnt);
+	}
 }
