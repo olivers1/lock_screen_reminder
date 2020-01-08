@@ -5,6 +5,8 @@ Actuator::Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte
 {
 	m_ledAlarmCnt = 0;
 	m_buzzerAlarmCnt = 0;
+	m_currentMillis = 0;
+	m_previousMillis = 0;
 
 	// catch faulty parameter input
 	if (alarmTimePeriod > 1000 || (alarmTypeSelect > 3))
@@ -23,35 +25,58 @@ Actuator::Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte
 }
 
 
-void Actuator::ActivateLedAlarm()
+void Actuator::LedAlarmOn()
 {
 	digitalWrite(m_ledLightPin, HIGH);
 	m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
 }
 
-void Actuator::DeactivateLedAlarm()
+void Actuator::LedAlarmOff()
 {
 	digitalWrite(m_ledLightPin, LOW);
 	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
 }
 
-void Actuator::ActivateBuzzerAlarm()
+void Actuator::BuzzerAlarmOn()
 {
 	digitalWrite(m_buzzerSoundPin, HIGH);
 	m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
 }
 
-void Actuator::DeactivateBuzzerAlarm()
+void Actuator::BuzzerAlarmOff()
 {
 	digitalWrite(m_buzzerSoundPin, LOW);
 	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
 }
 
-bool Actuator::CheckForAlarmActivation()
+unsigned int Actuator::m_timePeriodLeft()
 {
+	return m_previousMillis - m_currentMillis;
+}
+
+bool Actuator::AlarmActivationHandler()
+{
+	// check if 'alarm enabled' flag is set?
 	if (m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->ALARM_ENABLED))
 	{
-		Serial.println("hello");
+		// yes, check if 'timer finished' flag is set?
+		if (m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED))
+		{
+			// yes, countdown timer is finished. activate alarm
+			m_currentMillis = millis();
+			LedAlarmOn();		// turn alarm devices on
+			BuzzerAlarmOn();
+			if (m_timePeriodLeft() <= m_alarmTimePeriod)
+			{
+				m_previousMillis = m_currentMillis;
+				Serial.println("ALARM");
+			}
+			else
+			{
+				LedAlarmOff();		// turn alarm devices off
+				BuzzerAlarmOff();
+			}
+		}
 	}
 	// wait for the countdown timer to finish. read stateRegister to see when countdowntimer is finished 
 	// add millis() here to activate and deactivate ledLightAlarm and buzzerSoundAlarm respectively according to predefined timer interval

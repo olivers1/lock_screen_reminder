@@ -8,20 +8,23 @@ class Actuator
 private:
 	byte m_ledLightPin;
 	const byte m_buzzerSoundPin;
-	byte m_ledAlarmCnt;
 	const byte m_nLedAlarmLoops;
-	byte m_buzzerAlarmCnt;
 	const byte m_nBuzzerAlarmLoops;
 	byte m_alarmTypeSelect;
 	const unsigned int m_alarmTimePeriod;
 	StateRegisterHandler* m_stateRegisterHandlerObj;
+	byte m_ledAlarmCnt;
+	byte m_buzzerAlarmCnt;
+	unsigned long m_currentMillis;
+	unsigned long m_previousMillis;
 
-	void ActivateLedAlarm();
-	void DeactivateLedAlarm();
-	void ActivateBuzzerAlarm();
-	void DeactivateBuzzerAlarm();
+	void LedAlarmOn();
+	void LedAlarmOff();
+	void BuzzerAlarmOn();
+	void BuzzerAlarmOff();
+	unsigned int m_timePeriodLeft();
 public:
 	Actuator(byte, byte, const byte, const byte, byte, const unsigned int, StateRegisterHandler*);
-	bool CheckForAlarmActivation();
+	bool AlarmActivationHandler();
 };
 

@@ -103,10 +103,11 @@ void loop() {
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
     static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);
-    static Actuator actuatorDevice(ledPin, buzzerPin, 5, 5, 4, 300, &stateRegister);
+    static Actuator actuator(ledPin, buzzerPin, 5, 5, 3, 200, &stateRegister);
+
+    actuator.AlarmActivationHandler();
 
     unsigned long currentMillis = millis();
-
     if (currentMillis - previousMillis >= TIME_INTERVAL_1)
     {
         previousMillis = currentMillis;
