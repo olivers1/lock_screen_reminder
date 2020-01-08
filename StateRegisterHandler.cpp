@@ -14,6 +14,11 @@ void StateRegisterHandler::ClearFlagStateRegister(States flag)
 	m_stateReg &= (MASK ^ flag);
 }
 
+bool StateRegisterHandler::CheckFlagStateRegister(States flag)
+{
+	return m_stateReg & flag;
+}
+
 void StateRegisterHandler::CheckWorkplace()
 {
 	// check if workplace is empty and update stateRegister accordingly
@@ -83,9 +88,4 @@ void StateRegisterHandler::CheckWorkplace()
 
 	Serial.print("m_lightAboveCnt: ");
 	Serial.println(m_lightAboveCnt);
-}
-
-bool StateRegisterHandler::CheckFlagStateRegister(States flag)
-{
-	return m_stateReg & flag;
 }

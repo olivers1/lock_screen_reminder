@@ -13,7 +13,7 @@ public:
 		MONITOR_ON = 1 << 1,        // binary 0000'0010
 		TIMER_ENABLED = 1 << 2,     // binary 0000'0100
 		TIMER_FINISHED = 1 << 3,    // binary 0000'1000
-		ALARM_DISABLED = 1 << 4,    // binary 0001'0000
+		ALARM_ENABLED  = 1 << 4,	// binary 0001'0000
 		LED_ALARM_ON = 1 << 5,		// binary 0010'0000
 		BUZZER_ALARM_ON = 1 << 6,	// binary 0100'0000
 		MASK = B11111111            // binary 1111'1111
@@ -32,6 +32,7 @@ public:
 	StateRegisterHandler(byte, byte, DistanceSensor*, LightSensor*);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
+	bool CheckFlagStateRegister(States); 
 	void CheckWorkplace();
-	bool CheckFlagStateRegister(States);
+	
 };

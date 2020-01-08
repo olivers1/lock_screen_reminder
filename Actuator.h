@@ -11,6 +11,7 @@ private:
 	const byte m_nLedAlarmLoops;
 	const byte m_nBuzzerAlarmLoops;
 	byte m_alarmTypeSelect;
+	const unsigned int m_alarmTimePeriod;
 	StateRegisterHandler* m_stateRegisterHandlerObj;
 
 	void ActivateLedAlarm();
@@ -18,7 +19,7 @@ private:
 	void ActivateBuzzerAlarm();
 	void DeactivateBuzzerAlarm();
 public:
-	Actuator(const byte, const byte, const byte, const byte, byte, StateRegisterHandler*);
+	Actuator(const byte, const byte, const byte, const byte, byte, const unsigned int, StateRegisterHandler*);
 	bool CheckForAlarmActivation();
 };
 

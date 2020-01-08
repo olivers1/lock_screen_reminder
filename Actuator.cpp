@@ -1,7 +1,7 @@
 #include "Actuator.h"
 
-Actuator::Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte nLedAlarmLoops, const byte nBuzzerAlarmLoops, byte alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj)
-	: m_ledLightPin(ledLightPin), m_buzzerSoundPin(buzzerSoundPin), m_nLedAlarmLoops(nLedAlarmLoops), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_alarmTypeSelect(alarmTypeSelect), m_stateRegisterHandlerObj(stateRegisterHandlerObj) {}
+Actuator::Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte nLedAlarmLoops, const byte nBuzzerAlarmLoops, byte alarmTypeSelect, const unsigned int alarmTimePeriod, StateRegisterHandler* stateRegisterHandlerObj)
+	: m_ledLightPin(ledLightPin), m_buzzerSoundPin(buzzerSoundPin), m_nLedAlarmLoops(nLedAlarmLoops), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_alarmTypeSelect(alarmTypeSelect), m_alarmTimePeriod(alarmTimePeriod), m_stateRegisterHandlerObj(stateRegisterHandlerObj)  {}
 
 void Actuator::ActivateLedAlarm()
 {
