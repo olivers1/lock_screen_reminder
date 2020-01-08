@@ -34,5 +34,4 @@ public:
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States); 
 	void CheckWorkplace();
-	
 };

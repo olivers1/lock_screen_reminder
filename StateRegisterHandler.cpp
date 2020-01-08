@@ -1,7 +1,14 @@
 #include "StateRegisterHandler.h"
 
 StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj)
-	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceSensorObj(distanceSensorObj), m_lightSensorObj(lightSensorObj), m_distanceAboveCnt(0), m_distanceBelowCnt(0), m_lightBelowCnt(0), m_lightAboveCnt(0), m_stateReg(RESET) {}
+	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceSensorObj(distanceSensorObj), m_lightSensorObj(lightSensorObj)
+{
+	m_distanceAboveCnt = 0;
+	m_distanceBelowCnt = 0;
+	m_lightBelowCnt = 0;
+	m_lightAboveCnt = 0;
+	m_stateReg = RESET;
+}
 
 
 void StateRegisterHandler::SetFlagStateRegister(States flag)
