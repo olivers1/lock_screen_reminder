@@ -14,7 +14,8 @@ public:
 		TIMER_ENABLED = 1 << 2,     // binary 0000'0100
 		TIMER_FINISHED = 1 << 3,    // binary 0000'1000
 		ALARM_DISABLED = 1 << 4,    // binary 0001'0000
-		AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
+		LED_ALARM_ON = 1 << 5,		// binary 0010'0000
+		BUZZER_ALARM_ON = 1 << 6,	// binary 0100'0000
 		MASK = B11111111            // binary 1111'1111
 	};
 private:
@@ -27,11 +28,10 @@ private:
 	byte m_stateReg;
 	DistanceSensor* m_distanceSensorObj;
 	LightSensor* m_lightSensorObj;
-
-	void SetFlagStateRegister(States);
-	void ClearFlagStateRegister(States);
 public:
 	StateRegisterHandler(byte, byte, DistanceSensor*, LightSensor*);
+	void SetFlagStateRegister(States);
+	void ClearFlagStateRegister(States);
 	void CheckWorkplace();
 	bool CheckFlagStateRegister(States);
 };

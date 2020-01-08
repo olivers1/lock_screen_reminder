@@ -52,8 +52,8 @@ void StateRegisterHandler::CheckWorkplace()
 			if (m_lightBelowCnt == m_nLightChecks)
 			{
 				// monitor is still on
-				SetFlagStateRegister(MONITOR_ON);	// updated flag in state register
 				m_lightBelowCnt = 0;	// reset counter
+				SetFlagStateRegister(MONITOR_ON);	// updated flag in state register
 			}
 		}
 		else
@@ -63,8 +63,8 @@ void StateRegisterHandler::CheckWorkplace()
 			if (m_lightAboveCnt == m_nLightChecks)
 			{
 				// monitor is turned off
-				ClearFlagStateRegister(MONITOR_ON);		// clear flag in state register
 				m_lightAboveCnt = 0;	// reset counter
+				ClearFlagStateRegister(MONITOR_ON);		// clear flag in state register
 			}
 		}
 	}

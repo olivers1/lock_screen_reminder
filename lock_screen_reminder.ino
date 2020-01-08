@@ -6,6 +6,7 @@
 #include "LightSensor.h"
 #include "DistanceSensor.h"
 #include "StateRegisterHandler.h"
+#include "Actuator.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels
@@ -25,19 +26,20 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define ledPin                  11
 
 const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
-unsigned long previousMillis = 0;
+unsigned long previousMillis = 0;  
 
 /*
-enum class States : byte {  // enum with own namespace
-    RESET = 0,
-    WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
-    MONITOR_ON = 1 << 1,        // binary 0000'0010
-    TIMER_ENABLED = 1 << 2,     // binary 0000'0100
-    TIMER_FINISHED = 1 << 3,    // binary 0000'1000
-    ALARM_DISABLED = 1 << 4,    // binary 0001'0000
-    AUDIO_VISUAL_ON = 1 << 5,   // binary 0010'0000
-    MASK = B11111111            // binary 1111'1111
-};
+    enum class States : byte {  // enum with its own namespace
+        RESET = 0,
+        WORKPLACE_EMPTY = 1 << 0,   // binary 0000'0001
+        MONITOR_ON = 1 << 1,        // binary 0000'0010
+        TIMER_ENABLED = 1 << 2,     // binary 0000'0100
+        TIMER_FINISHED = 1 << 3,    // binary 0000'1000
+        ALARM_DISABLED = 1 << 4,    // binary 0001'0000
+        LED_ALARM_ON = 1 << 5,		// binary 0010'0000
+        BUZZER_ALARM_ON = 1 << 6,	// binary 0100'0000
+        MASK = B11111111            // binary 1111'1111
+    };
 
 States stateReg{ States::RESET };
 //States stateReg = States::RESET;
@@ -100,7 +102,8 @@ void loop() {
     // instaciate senor objects
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
-    static StateRegisterHandler stateReg(5, 5, &distanceSensor, &lightSensor);
+    static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);
+    static 
 
     unsigned long currentMillis = millis();
 
@@ -108,7 +111,7 @@ void loop() {
     {
         previousMillis = currentMillis;
 
-        stateReg.CheckWorkplace();
+        stateRegister.CheckWorkplace();
     }
 }
 
