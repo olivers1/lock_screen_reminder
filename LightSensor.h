@@ -11,7 +11,7 @@ private:
 
 	unsigned int ReadLight();
 public:
-	LightSensor(byte, unsigned int);
+	LightSensor(const byte lightSensorPin, const unsigned int lightThreshold);
 	bool GetLightStatus();
 	int GetLightValue();
 };

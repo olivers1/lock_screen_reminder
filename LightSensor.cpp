@@ -1,6 +1,6 @@
 #include "LightSensor.h"
 
-LightSensor::LightSensor(byte lightSensorPin, unsigned int lightThreshold)
+LightSensor::LightSensor(const byte lightSensorPin, const unsigned int lightThreshold)
 	: m_lightSensorPin(lightSensorPin), m_lightThreshold(lightThreshold), m_isBelowThreshold(false) {}
 
 unsigned int LightSensor::ReadLight()

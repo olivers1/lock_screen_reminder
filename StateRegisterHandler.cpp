@@ -1,6 +1,6 @@
 #include "StateRegisterHandler.h"
 
-StateRegisterHandler::StateRegisterHandler(byte nDistanceChecks, byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj)
+StateRegisterHandler::StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj)
 	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceSensorObj(distanceSensorObj), m_lightSensorObj(lightSensorObj)
 {
 	m_distanceAboveCnt = 0;

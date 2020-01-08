@@ -24,7 +24,7 @@ private:
 	void BuzzerAlarmOff();
 	unsigned int m_timePeriodLeft();
 public:
-	Actuator(byte, byte, const byte, const byte, byte, const unsigned int, StateRegisterHandler*);
+	Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte nLedAlarmLoops, const byte nBuzzerAlarmLoops, byte alarmTypeSelect, const unsigned int alarmTimePeriod, StateRegisterHandler* StateRegisterHandler);
 	bool AlarmActivationHandler();
 };
 

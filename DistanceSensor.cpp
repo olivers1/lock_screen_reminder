@@ -1,6 +1,6 @@
 #include "DistanceSensor.h"
 
-DistanceSensor::DistanceSensor(byte ultrasonicTrigPin, byte ultrasonicEchoPin, unsigned int distanceThreshold)
+DistanceSensor::DistanceSensor(const byte ultrasonicTrigPin, const byte ultrasonicEchoPin, const unsigned int distanceThreshold)
 	: m_ultrasonicTrigPin(ultrasonicTrigPin), m_ultrasonicEchoPin(ultrasonicEchoPin), m_distanceThreshold(distanceThreshold), m_isAboveThreshold(false) {}
 
 unsigned int DistanceSensor::ReadDistance()

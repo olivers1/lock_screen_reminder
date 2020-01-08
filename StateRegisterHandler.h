@@ -29,7 +29,7 @@ private:
 	DistanceSensor* m_distanceSensorObj;
 	LightSensor* m_lightSensorObj;
 public:
-	StateRegisterHandler(byte, byte, DistanceSensor*, LightSensor*);
+	StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States); 
