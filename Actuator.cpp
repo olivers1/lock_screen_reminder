@@ -51,7 +51,7 @@ void Actuator::BuzzerAlarmOff()
 
 unsigned int Actuator::m_timePeriodLeft()
 {
-	return m_previousMillis - m_currentMillis;
+	return m_currentMillis - m_previousMillis;
 }
 
 bool Actuator::AlarmActivationHandler()
@@ -64,17 +64,26 @@ bool Actuator::AlarmActivationHandler()
 		{
 			// yes, countdown timer is finished. activate alarm
 			m_currentMillis = millis();
-			LedAlarmOn();		// turn alarm devices on
-			BuzzerAlarmOn();
-			if (m_timePeriodLeft() <= m_alarmTimePeriod)
+			
+			if (m_timePeriodLeft() >= m_alarmTimePeriod)
 			{
 				m_previousMillis = m_currentMillis;
-				Serial.println("ALARM");
-			}
-			else
-			{
-				LedAlarmOff();		// turn alarm devices off
-				BuzzerAlarmOff();
+				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON)))
+				{
+					LedAlarmOn();		// turn on alarm devices
+					BuzzerAlarmOn();
+					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
+					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+					Serial.println("ALARM");
+				}
+				else
+				{
+					LedAlarmOff();		// turn off alarm devices
+					BuzzerAlarmOff();
+					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
+					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+					Serial.println("silent_'ALARM'");
+				}
 			}
 		}
 	}
