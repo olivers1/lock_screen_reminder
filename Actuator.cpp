@@ -1,20 +1,24 @@
 #include "Actuator.h"
 
-Actuator::Actuator(const byte ledLightPin, const byte buzzerSoundPin, const byte nLedAlarmLoops, const byte nBuzzerAlarmLoops, byte alarmTypeSelect, const unsigned int alarmTimePeriod, StateRegisterHandler* stateRegisterHandlerObj)
-	: m_ledLightPin(ledLightPin), m_buzzerSoundPin(buzzerSoundPin), m_nLedAlarmLoops(nLedAlarmLoops), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_alarmTypeSelect(alarmTypeSelect), m_alarmTimePeriod(alarmTimePeriod), m_stateRegisterHandlerObj(stateRegisterHandlerObj)
+Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsigned int ledAlarmTimePeriod, const byte buzzerSoundPin, const byte nBuzzerAlarmLoops, const unsigned int buzzerAlarmTimePeriod, byte alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj)
+	: m_ledLightPin(ledLightPin), m_nLedAlarmLoops(nLedAlarmLoops), m_ledAlarmTimePeriod(ledAlarmTimePeriod), m_buzzerSoundPin(buzzerSoundPin), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_buzzerAlarmTimePeriod(buzzerAlarmTimePeriod), m_alarmTypeSelect(alarmTypeSelect), m_stateRegisterHandlerObj(stateRegisterHandlerObj)
 {
 	m_ledAlarmCnt = 0;
 	m_buzzerAlarmCnt = 0;
-	m_currentMillis = 0;
-	m_previousMillis = 0;
+	m_ledPreviousMillis = 0;
+	m_buzzerPreviousMillis = 0;
 
-	// catch faulty parameter input
-	if (alarmTimePeriod > 1000 || (alarmTypeSelect > 3))
+	// catch any faulty parameter input
+	if (ledAlarmTimePeriod > 1000 || buzzerAlarmTimePeriod > 300 || (alarmTypeSelect > 3))
 	{
 		Serial.println("Actuator object initializing failed");
-		if (alarmTimePeriod > 1000)
+		if (ledAlarmTimePeriod > 1000)
 		{
-			Serial.println("alarmTimePeriod parameter value is invalid, must be < 1000");
+			Serial.println("ledAlarmTimePeriod parameter value is invalid, must be < 1000");
+		}
+		else if (buzzerAlarmTimePeriod > 300)
+		{
+			Serial.println("buzzerAlarmTimePeriod parameter value is invalid, must be < 300");
 		}
 		else if(alarmTypeSelect > 3)
 		{
@@ -49,11 +53,6 @@ void Actuator::BuzzerAlarmOff()
 	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
 }
 
-unsigned int Actuator::m_timePeriodLeft()
-{
-	return m_currentMillis - m_previousMillis;
-}
-
 bool Actuator::AlarmActivationHandler()
 {
 	// check if 'alarm enabled' flag is set?
@@ -63,26 +62,41 @@ bool Actuator::AlarmActivationHandler()
 		if (m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED))
 		{
 			// yes, countdown timer is finished. activate alarm
-			m_currentMillis = millis();
+			unsigned long m_currentMillis = millis();
 			
-			if (m_timePeriodLeft() >= m_alarmTimePeriod)
+			// led light alarm control
+			if (m_currentMillis - m_ledPreviousMillis >= m_ledAlarmTimePeriod)
 			{
-				m_previousMillis = m_currentMillis;
+				m_ledPreviousMillis = m_currentMillis;
 				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON)))
 				{
-					LedAlarmOn();		// turn on alarm devices
-					BuzzerAlarmOn();
+					LedAlarmOn();		// turn on alarm device
 					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
-					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
-					Serial.println("ALARM");
+					Serial.println("alarm: LED");
 				}
 				else
 				{
 					LedAlarmOff();		// turn off alarm devices
-					BuzzerAlarmOff();
-					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
 					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
-					Serial.println("silent_'ALARM'");
+					Serial.println("silent alarm: LED");
+				}
+			}
+
+				// buzzer alarm control
+			if(m_currentMillis - m_buzzerPreviousMillis >= m_buzzerAlarmTimePeriod)
+			{
+				m_buzzerPreviousMillis = m_currentMillis;
+				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON)))
+				{
+					BuzzerAlarmOn();	// turn on alarm devices
+					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+					Serial.println("alarm: BUZZER");
+				}
+				else
+				{
+					BuzzerAlarmOff();	// turn on alarm devices
+					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+					Serial.println("silent alarm: BUZZER");
 				}
 			}
 		}
