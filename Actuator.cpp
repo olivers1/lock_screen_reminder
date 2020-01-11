@@ -1,12 +1,13 @@
 #include "Actuator.h"
 
-Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsigned int ledAlarmTimePeriod, const byte buzzerSoundPin, const byte nBuzzerAlarmLoops, const unsigned int buzzerAlarmTimePeriod, byte alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj)
+Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsigned int ledAlarmTimePeriod, const byte buzzerSoundPin, const byte nBuzzerAlarmLoops, const unsigned int buzzerAlarmTimePeriod, AlarmType alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj)
 	: m_ledLightPin(ledLightPin), m_nLedAlarmLoops(nLedAlarmLoops), m_ledAlarmTimePeriod(ledAlarmTimePeriod), m_buzzerSoundPin(buzzerSoundPin), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_buzzerAlarmTimePeriod(buzzerAlarmTimePeriod), m_alarmTypeSelect(alarmTypeSelect), m_stateRegisterHandlerObj(stateRegisterHandlerObj)
 {
 	m_ledAlarmCnt = 0;
 	m_buzzerAlarmCnt = 0;
 	m_ledPreviousMillis = 0;
 	m_buzzerPreviousMillis = 0;
+	m_alarmTypeSelectCopy = m_alarmTypeSelect;	// store a copy of initialized value
 
 	// catch any faulty parameter input
 	if (ledAlarmTimePeriod > 1000 || buzzerAlarmTimePeriod > 300 || (alarmTypeSelect > 3))
@@ -53,6 +54,47 @@ void Actuator::BuzzerAlarmOff()
 	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
 }
 
+void Actuator::DisableSelectedAlarm(AlarmType alarmType)
+{
+	// check which alarm types that was initialized when object was instatiated
+	switch (m_alarmTypeSelect)
+	{
+	case LED_LIGHT_ALARM:		// only led light alarm was active
+		m_alarmTypeSelect = 0;
+		break;
+	case BUZZER_ALARM:			// only buzzer alarms was active
+		m_alarmTypeSelect = 0;
+		break;
+	case LED_AND_BUZZER_ALARM:	// both led light- and buzzer-alarm was active
+		{
+			if (alarmType == LED_LIGHT_ALARM)
+			{
+				m_alarmTypeSelect = BUZZER_ALARM;		// deactive led light alarm but keep buzzer alarm active
+			}
+			else	// BUZZER_ALARM is active
+			{
+				m_alarmTypeSelect = LED_LIGHT_ALARM;	// deactive buzzer alarm but keep led light alarm active
+			}
+		}
+		break;
+	}
+}
+
+void Actuator::CheckAlarmLoops()
+{
+	if (m_ledAlarmCnt == m_nLedAlarmLoops)
+	{
+		m_ledAlarmCnt = 0;		// reset counter
+		DisableSelectedAlarm(LED_LIGHT_ALARM);
+	}
+
+	if (m_buzzerAlarmCnt == m_nBuzzerAlarmLoops)
+	{
+		m_buzzerAlarmCnt = 0;	// reset counter
+		DisableSelectedAlarm(BUZZER_ALARM);
+	}
+}
+
 bool Actuator::AlarmActivationHandler()
 {
 	// check if 'alarm enabled' flag is set?
@@ -67,40 +109,56 @@ bool Actuator::AlarmActivationHandler()
 			// led light alarm control
 			if (m_currentMillis - m_ledPreviousMillis >= m_ledAlarmTimePeriod)
 			{
-				m_ledPreviousMillis = m_currentMillis;
-				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON)))
+				if (m_alarmTypeSelect == 1 || m_alarmTypeSelect == 3)	// check if led light alarm is enabled by alarm selector
 				{
-					LedAlarmOn();		// turn on alarm device
-					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
-					Serial.println("alarm: LED");
-				}
-				else
-				{
-					LedAlarmOff();		// turn off alarm devices
-					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
-					Serial.println("silent alarm: LED");
+					m_ledPreviousMillis = m_currentMillis;
+					if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON)))
+					{
+						LedAlarmOn();		// turn on alarm device
+						m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
+						Serial.println("alarm: LED");
+						m_ledAlarmCnt++;	// increase led light alarm counter to keep track of the number of loops
+					}
+					else
+					{
+						LedAlarmOff();		// turn off alarm devices
+						m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+						Serial.println("silent alarm: LED");
+					}
 				}
 			}
 
-				// buzzer alarm control
+			// buzzer alarm control
 			if(m_currentMillis - m_buzzerPreviousMillis >= m_buzzerAlarmTimePeriod)
 			{
-				m_buzzerPreviousMillis = m_currentMillis;
-				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON)))
+				if (m_alarmTypeSelect == 2 || m_alarmTypeSelect == 3)	// check if buzzer alarm is enabled by alarm selector
 				{
-					BuzzerAlarmOn();	// turn on alarm devices
-					m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
-					Serial.println("alarm: BUZZER");
-				}
-				else
-				{
-					BuzzerAlarmOff();	// turn on alarm devices
-					m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
-					Serial.println("silent alarm: BUZZER");
+					m_buzzerPreviousMillis = m_currentMillis;
+					if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON)))
+					{
+						BuzzerAlarmOn();	// turn on alarm devices
+						m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+						Serial.println("alarm: BUZZER");
+						m_buzzerAlarmCnt++;		// increase buzzer alarm counter to keep track of the number of loops
+					}
+					else
+					{
+						BuzzerAlarmOff();	// turn on alarm devices
+						m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+						Serial.println("silent alarm: BUZZER");
+					}
 				}
 			}
+			Serial.print("m_alarmTypeSelect: ");
+			Serial.println(m_alarmTypeSelect);
+
+			CheckAlarmLoops();	// check if number of alarm loops for led light- and buzzer-alarm have respectively reached specified number of loops
+
+			Serial.print("m_ledAlarmCnt: ");
+			Serial.println(m_ledAlarmCnt);
+
+			Serial.print("m_buzzerAlarmCnt: ");
+			Serial.println(m_buzzerAlarmCnt);
 		}
 	}
-	// wait for the countdown timer to finish. read stateRegister to see when countdowntimer is finished 
-	// add millis() here to activate and deactivate ledLightAlarm and buzzerSoundAlarm respectively according to predefined timer interval
 }
