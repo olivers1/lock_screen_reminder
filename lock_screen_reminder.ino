@@ -103,7 +103,7 @@ void loop() {
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
     static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);
-    static Actuator actuator(ledPin, 2, 900, buzzerPin, 10, 30, 3, &stateRegister);
+    static Actuator actuator(ledPin, 3, 900, buzzerPin, 10, 30, 3, &stateRegister);
     actuator.AlarmActivationHandler();
 
     unsigned long currentMillis = millis();
