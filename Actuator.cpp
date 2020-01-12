@@ -102,6 +102,10 @@ void Actuator::CheckAlarmLoops()
 	{
 		m_alarmTypeSelect = m_alarmTypeSelectCopy;	// reset m_alarmTypeSelect to original value it had when object was instantiated
 		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);	// clear 'timer finished' flag to avoid any alarm to be trigged
+		Serial.print("m_alarmTypeSelect: ");
+		Serial.println(m_alarmTypeSelect);
+		Serial.print("TIMER_FINISHED flag: ");
+		Serial.println(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED), DEC);
 	}
 }
 
