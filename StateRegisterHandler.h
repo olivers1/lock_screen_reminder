@@ -26,7 +26,7 @@ private:
 	byte m_lightBelowCnt;
 	byte m_lightAboveCnt;
 	const byte m_nLightChecks;
-	byte m_stateReg;
+	byte m_stateRegister;
 	DistanceSensor* m_distanceSensorObj;
 	LightSensor* m_lightSensorObj;
 public:

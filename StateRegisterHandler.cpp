@@ -7,23 +7,23 @@ StateRegisterHandler::StateRegisterHandler(const byte nDistanceChecks, const byt
 	m_distanceBelowCnt = 0;
 	m_lightBelowCnt = 0;
 	m_lightAboveCnt = 0;
-	m_stateReg = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
+	m_stateRegister = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
 }
 
 
 void StateRegisterHandler::SetFlagStateRegister(States flag)
 {
-	m_stateReg |= flag;
+	m_stateRegister |= flag;
 }
 
 void StateRegisterHandler::ClearFlagStateRegister(States flag)
 {
-	m_stateReg &= (MASK ^ flag);
+	m_stateRegister &= (MASK ^ flag);
 }
 
 bool StateRegisterHandler::CheckFlagStateRegister(States flag)
 {
-	return m_stateReg & flag;
+	return m_stateRegister & flag;
 }
 
 void StateRegisterHandler::CheckWorkplace()
@@ -90,7 +90,7 @@ void StateRegisterHandler::CheckWorkplace()
 	}
 
 	Serial.print("stateReg: ");
-	Serial.println(m_stateReg);
+	Serial.println(m_stateRegister);
 
 	Serial.print("m_distanceAboveCnt: ");
 	Serial.println(m_distanceAboveCnt);

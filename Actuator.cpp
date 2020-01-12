@@ -1,7 +1,7 @@
 #include "Actuator.h"
 
 Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsigned int ledAlarmTimePeriod, const byte buzzerSoundPin, const byte nBuzzerAlarmLoops, const unsigned int buzzerAlarmTimePeriod, AlarmType alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj)
-	: m_ledLightPin(ledLightPin), m_nLedAlarmLoops(nLedAlarmLoops), m_ledAlarmTimePeriod(ledAlarmTimePeriod), m_buzzerSoundPin(buzzerSoundPin), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_buzzerAlarmTimePeriod(buzzerAlarmTimePeriod), m_alarmTypeSelect(alarmTypeSelect), m_stateRegisterHandlerObj(stateRegisterHandlerObj)
+	: m_ledLightPin(ledLightPin), m_nLedAlarmLoops(nLedAlarmLoops), m_ledAlarmTimePeriod(ledAlarmTimePeriod), m_buzzerSoundPin(buzzerSoundPin), m_nBuzzerAlarmLoops(nBuzzerAlarmLoops), m_buzzerAlarmTimePeriod(buzzerAlarmTimePeriod), m_alarmTypeSelect(alarmTypeSelect), m_stateRegisteristerHandlerObj(stateRegisterHandlerObj)
 {
 	m_ledAlarmCnt = 0;
 	m_buzzerAlarmCnt = 0;
@@ -33,25 +33,25 @@ Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsi
 void Actuator::LedAlarmOn()
 {
 	digitalWrite(m_ledLightPin, HIGH);
-	m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
+	m_stateRegisteristerHandlerObj->SetFlagStateRegister(m_stateRegisteristerHandlerObj->LED_ALARM_ON);
 }
 
 void Actuator::LedAlarmOff()
 {
 	digitalWrite(m_ledLightPin, LOW);
-	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON);
+	m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->LED_ALARM_ON);
 }
 
 void Actuator::BuzzerAlarmOn()
 {
 	digitalWrite(m_buzzerSoundPin, HIGH);
-	m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+	m_stateRegisteristerHandlerObj->SetFlagStateRegister(m_stateRegisteristerHandlerObj->BUZZER_ALARM_ON);
 }
 
 void Actuator::BuzzerAlarmOff()
 {
 	digitalWrite(m_buzzerSoundPin, LOW);
-	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON);
+	m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->BUZZER_ALARM_ON);
 }
 
 void Actuator::DisableSelectedAlarm(AlarmType alarmType)
@@ -61,13 +61,13 @@ void Actuator::DisableSelectedAlarm(AlarmType alarmType)
 	{
 	case LED_LIGHT_ALARM:		// only led light alarm was active
 		m_alarmTypeSelect = 0;
-		//m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->ALARM_ENABLED);	// disable alarm function
-		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
+		//m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->ALARM_ENABLED);	// disable alarm function
+		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
 		break;
 	case BUZZER_ALARM:			// only buzzer alarms was active
 		m_alarmTypeSelect = 0;
-		//m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->ALARM_ENABLED);	// disable alarm function
-		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
+		//m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->ALARM_ENABLED);	// disable alarm function
+		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
 		break;
 	case LED_AND_BUZZER_ALARM:	// both led light- and buzzer-alarm was active
 		{
@@ -101,18 +101,18 @@ void Actuator::CheckAlarmLoops()
 	if (m_alarmTypeSelect == NO_ALARM)
 	{
 		m_alarmTypeSelect = m_alarmTypeSelectCopy;	// reset m_alarmTypeSelect to original value it had when object was instantiated
-		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);	// clear 'timer finished' flag to avoid any alarm to be trigged
+		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->TIMER_FINISHED);	// clear 'timer finished' flag to avoid any alarm to be trigged
 		Serial.print("m_alarmTypeSelect: ");
 		Serial.println(m_alarmTypeSelect);
 		Serial.print("TIMER_FINISHED flag: ");
-		Serial.println(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED), DEC);
+		Serial.println(m_stateRegisteristerHandlerObj->CheckFlagStateRegister(m_stateRegisteristerHandlerObj->TIMER_FINISHED), DEC);
 	}
 }
 
 void Actuator::AlarmActivationHandler()
 {
 	// check if 'timer finished' flag is set?
-	if (m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED))
+	if (m_stateRegisteristerHandlerObj->CheckFlagStateRegister(m_stateRegisteristerHandlerObj->TIMER_FINISHED))
 	{
 		// yes, countdown timer is finished. activate alarm
 		unsigned long m_currentMillis = millis();
@@ -123,7 +123,7 @@ void Actuator::AlarmActivationHandler()
 			if (m_alarmTypeSelect == LED_LIGHT_ALARM || (m_alarmTypeSelect == LED_AND_BUZZER_ALARM))	// check if led light alarm is enabled by alarm selector
 			{
 				m_ledPreviousMillis = m_currentMillis;
-				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->LED_ALARM_ON)))
+				if (!(m_stateRegisteristerHandlerObj->CheckFlagStateRegister(m_stateRegisteristerHandlerObj->LED_ALARM_ON)))
 				{
 					LedAlarmOn();		// turn on alarm device
 					Serial.println("alarm: LED");
@@ -150,7 +150,7 @@ void Actuator::AlarmActivationHandler()
 			if (m_alarmTypeSelect == BUZZER_ALARM || (m_alarmTypeSelect == LED_AND_BUZZER_ALARM))	// check if buzzer alarm is enabled by alarm selector
 			{
 				m_buzzerPreviousMillis = m_currentMillis;
-				if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->BUZZER_ALARM_ON)))
+				if (!(m_stateRegisteristerHandlerObj->CheckFlagStateRegister(m_stateRegisteristerHandlerObj->BUZZER_ALARM_ON)))
 				{
 					BuzzerAlarmOn();	// turn on alarm devices
 					Serial.println("alarm: BUZZER");

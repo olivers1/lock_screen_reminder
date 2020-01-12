@@ -20,7 +20,7 @@ private:
 	const byte m_nBuzzerAlarmLoops;
 	const unsigned int m_buzzerAlarmTimePeriod;
 	byte m_alarmTypeSelect;
-	StateRegisterHandler* m_stateRegisterHandlerObj;
+	StateRegisterHandler* m_stateRegisteristerHandlerObj;
 	byte m_ledAlarmCnt;
 	byte m_buzzerAlarmCnt;
 	unsigned long m_ledPreviousMillis;
