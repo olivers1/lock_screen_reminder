@@ -35,6 +35,6 @@ private:
 	void CheckAlarmLoops();
 public:
 	Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsigned int ledAlarmTimePeriod, const byte buzzerSoundPin, const byte nBuzzerAlarmLoops, const unsigned int buzzerAlarmTimePeriod, AlarmType alarmTypeSelect, StateRegisterHandler* stateRegisterHandlerObj);
-	bool AlarmActivationHandler();
+	void AlarmActivationHandler();
 };
 
