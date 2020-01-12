@@ -7,7 +7,7 @@ StateRegisterHandler::StateRegisterHandler(const byte nDistanceChecks, const byt
 	m_distanceBelowCnt = 0;
 	m_lightBelowCnt = 0;
 	m_lightAboveCnt = 0;
-	m_stateReg = RESET;
+	m_stateReg = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
 }
 
 
@@ -31,13 +31,16 @@ void StateRegisterHandler::CheckWorkplace()
 	// check if workplace is empty and update stateRegister accordingly
 	if (m_distanceSensorObj->GetDistanceStatus())
 	{
-		m_distanceAboveCnt++;
-		m_distanceBelowCnt = 0;
-
-		if (m_distanceAboveCnt == m_nDistanceChecks)
+		if (CheckFlagStateRegister(WORKPLACE_CHECK_ENABLED))
 		{
-			SetFlagStateRegister(WORKPLACE_EMPTY);
-			m_distanceAboveCnt = 0;		// reset counter
+			m_distanceAboveCnt++;
+			m_distanceBelowCnt = 0;
+
+			if (m_distanceAboveCnt == m_nDistanceChecks)
+			{
+				SetFlagStateRegister(WORKPLACE_EMPTY);
+				m_distanceAboveCnt = 0;		// reset counter
+			}
 		}
 	}
 	else
@@ -49,6 +52,7 @@ void StateRegisterHandler::CheckWorkplace()
 		{
 			ClearFlagStateRegister(WORKPLACE_EMPTY);
 			m_distanceBelowCnt = 0;		// reset counter
+			SetFlagStateRegister(WORKPLACE_CHECK_ENABLED);	// set 'workplace check' flag to enable workplace check when the workplace has been confirmed to be reoccupied after an alarm has been trigged
 		}
 	}
 
