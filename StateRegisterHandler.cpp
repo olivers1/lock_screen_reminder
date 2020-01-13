@@ -71,7 +71,7 @@ void StateRegisterHandler::CheckWorkplace()
 				// monitor is still on
 				m_lightBelowCnt = 0;	// reset counter
 				SetFlagStateRegister(MONITOR_ON);	// updated flag in state register
-				SetFlagStateRegister(ALARM_ENABLED);	// requirements for an alarm is fulfilled, set 'alarm enabled' flag in state register
+				SetFlagStateRegister(ALARM_ENABLED);	// requirements for an alarm trigg is fulfilled. set 'alarm enabled' flag in state register to enable start of countdown timer
 				SetFlagStateRegister(TIMER_FINISHED);	// TEMPORARY, SHOULD NOT BE HERE, JUST TEST. REMOVE
 			}
 		}

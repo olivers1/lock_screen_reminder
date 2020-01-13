@@ -7,6 +7,7 @@
 #include "DistanceSensor.h"
 #include "StateRegisterHandler.h"
 #include "Actuator.h"
+#include "Timer.h"
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels

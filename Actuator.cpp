@@ -61,13 +61,9 @@ void Actuator::DisableSelectedAlarm(AlarmType alarmType)
 	{
 	case LED_LIGHT_ALARM:		// only led light alarm was active
 		m_alarmTypeSelect = 0;
-		//m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->ALARM_ENABLED);	// disable alarm function
-		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
 		break;
 	case BUZZER_ALARM:			// only buzzer alarms was active
 		m_alarmTypeSelect = 0;
-		//m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->ALARM_ENABLED);	// disable alarm function
-		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm triggs for same event
 		break;
 	case LED_AND_BUZZER_ALARM:	// both led light- and buzzer-alarm was active
 		{
@@ -115,6 +111,7 @@ void Actuator::AlarmActivationHandler()
 	if (m_stateRegisteristerHandlerObj->CheckFlagStateRegister(m_stateRegisteristerHandlerObj->TIMER_FINISHED))
 	{
 		// yes, countdown timer is finished. activate alarm
+		m_stateRegisteristerHandlerObj->ClearFlagStateRegister(m_stateRegisteristerHandlerObj->WORKPLACE_CHECK_ENABLED);	// clear 'workplace enabled' flag to prevent a series of alarm being trigged for the same event  
 		unsigned long m_currentMillis = millis();
 		
 		// led light alarm control
