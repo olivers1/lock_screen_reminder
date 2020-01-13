@@ -28,7 +28,7 @@ private:
 	byte m_alarmTypeSelectCopy;
 
 	void LedAlarmOn();
-	void LedAlarmOff();
+	void LedAlarmOff(); 
 	void BuzzerAlarmOn();
 	void BuzzerAlarmOff();
 	void DisableSelectedAlarm(AlarmType);

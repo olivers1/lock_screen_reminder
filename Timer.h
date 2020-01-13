@@ -1,14 +1,18 @@
 #pragma once
+
+#include "Arduino.h"
+#include "StateRegisterHandler.h"
+
 class Timer
 {
 	const unsigned long m_timerPeriod;
 	StateRegisterHandler* m_stateRegisterHandlerObj;
-	unsigned long timeNow;
+	unsigned long m_timeNow;
 
 	void ActivateTimer();
 public:
 	Timer(const unsigned long timerPeriod, StateRegisterHandler* stateRegisterHandlerObj);
-	unsigned long TimeLeft();
+	long TimeLeft(bool);
 	void TimerActivationHandler();
 };
 

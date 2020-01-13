@@ -105,6 +105,8 @@ void loop() {
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
     static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);
     static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);
+    static Timer timer(10000, &stateRegister);
+
     actuator.AlarmActivationHandler();
 
     unsigned long currentMillis = millis();
@@ -113,6 +115,7 @@ void loop() {
         previousMillis = currentMillis;
 
         stateRegister.CheckWorkplace();
+        timer.TimerActivationHandler();
     }
 }
 
