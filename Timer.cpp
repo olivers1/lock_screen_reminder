@@ -48,7 +48,6 @@ void Timer::TimerActivationHandler()
 		{
 			// no, start timer
 			ActivateTimer();
-			m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_ENABLED);	// update 'timer enabled' flag in state register
 		}
 		else
 		{
@@ -56,7 +55,12 @@ void Timer::TimerActivationHandler()
 			if (TimeLeft(false) <= 0)
 			{
 				// yes, timer is finished
-				m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);	// set 'timer finished' flag
+				m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);		// set 'timer finished' flag
+			}
+			else
+			{
+				Serial.print("timeLeft: ");
+				Serial.println(TimeLeft(true));
 			}
 		}
 	}
