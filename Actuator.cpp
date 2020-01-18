@@ -96,7 +96,9 @@ void Actuator::CheckAlarmLoops()
 
 	if (m_alarmTypeSelect == NO_ALARM)
 	{
+		// clear state register to enable a new workplace check loop
 		m_alarmTypeSelect = m_alarmTypeSelectCopy;	// reset m_alarmTypeSelect to original value it had when object was instantiated
+		
 		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);	// clear 'timer finished' flag to avoid a series of alarm triggs for same event 
 		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->ALARM_ENABLED);	// clear 'alarm enabled' flag to prevent timer to perform another countdown for same event
 		m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->TIMER_ENABLED);	// clear 'timer enabled' flag
