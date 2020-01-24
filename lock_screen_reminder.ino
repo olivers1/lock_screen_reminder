@@ -8,6 +8,8 @@
 #include "StateRegisterHandler.h"
 #include "Actuator.h"
 #include "Timer.h"
+#include "Core.h"
+
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels
@@ -100,22 +102,23 @@ void setup() {
 
 
 void loop() {
-    // instaciate senor objects
+    // instantiate senor objects
     static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
-    static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);
-    static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);
-    static Timer timer(10000, &stateRegister);
+    static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);    // = (number of measurements in a row to confirm 'empty workplace', external monitor, .., ..)
+    static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);     // = (.., number of led alarm loops, time in milliseconds between each led flash, .., number of buzzer alarm loops, time in milliseconds between each sound alarm, setting which alarm types that are active, ..)
+    static Timer timer(10000, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
 
-    actuator.AlarmActivationHandler();
+    actuator.AlarmActivationHandler();  // check if any alarm should be activated and if an alarm should be activated it handles activation and lenght of alarm signals
 
+    // check workplace according a preset time interval set by 'time interval 1' variable
     unsigned long currentMillis = millis();
     if (currentMillis - previousMillis >= TIME_INTERVAL_1)
     {
         previousMillis = currentMillis;
 
-        stateRegister.CheckWorkplace();
-        timer.TimerActivationHandler();
+        stateRegister.CheckWorkplace();     // check workplace and update flags in state register if workplace is empty, external monitor is turned on etc.
+        timer.TimerActivationHandler();     // activate timer if certain flags in state register is set
     }
 }
 
