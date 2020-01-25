@@ -113,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actuator.h" />
+    <ClInclude Include="Display.h" />
     <ClInclude Include="DistanceSensor.h" />
     <ClInclude Include="LightSensor.h" />
     <ClInclude Include="StateRegisterHandler.h" />
@@ -121,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actuator.cpp" />
+    <ClCompile Include="Display.cpp" />
     <ClCompile Include="DistanceSensor.cpp" />
     <ClCompile Include="LightSensor.cpp" />
     <ClCompile Include="StateRegisterHandler.cpp" />

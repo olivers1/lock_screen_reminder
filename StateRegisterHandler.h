@@ -29,10 +29,16 @@ private:
 	byte m_stateRegister;
 	DistanceSensor* m_distanceSensorObj;
 	LightSensor* m_lightSensorObj;
+	byte m_forgotLockCnt;
+	long m_elapsedTime;
+	bool m_toggle;
 public:
 	StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States); 
 	void CheckWorkplace();
+	byte& GetForgotLockCnt();
+	long& GetElapsedTime();
+	void IncreaseForgotLockCounter();
 };

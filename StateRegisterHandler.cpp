@@ -8,6 +8,9 @@ StateRegisterHandler::StateRegisterHandler(const byte nDistanceChecks, const byt
 	m_lightBelowCnt = 0;
 	m_lightAboveCnt = 0;
 	m_stateRegister = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
+	m_forgotLockCnt = 0;
+	m_elapsedTime = 0;
+	m_toggle = false;
 }
 
 
@@ -103,4 +106,29 @@ void StateRegisterHandler::CheckWorkplace()
 
 	Serial.print("m_lightAboveCnt: ");
 	Serial.println(m_lightAboveCnt);
+}
+
+byte& StateRegisterHandler::GetForgotLockCnt()
+{
+	return m_forgotLockCnt;
+}
+
+long& StateRegisterHandler::GetElapsedTime()
+{
+	m_elapsedTime = millis();	// read internal timer, counting up from zero when arduino was turned on
+	m_elapsedTime = (m_elapsedTime / 1000) / 60;	// convert time to minutes
+	return m_elapsedTime;	// elapsed time in minutes
+}
+
+void StateRegisterHandler::IncreaseForgotLockCounter()
+{
+	if (CheckFlagStateRegister(TIMER_FINISHED) && m_toggle == false)
+	{
+		m_forgotLockCnt++;	// increase counter by 1
+		m_toggle = true;	// set toggle variable to true to only count when 'timer finished' flag in state register changes to high
+	}
+	else if (!(CheckFlagStateRegister(TIMER_FINISHED) && m_toggle == true))
+	{
+		m_toggle = false;
+	}
 }

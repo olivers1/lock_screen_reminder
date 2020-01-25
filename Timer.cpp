@@ -56,6 +56,7 @@ void Timer::TimerActivationHandler()
 			{
 				// yes, timer is finished
 				m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);		// set 'timer finished' flag
+				m_stateRegisterHandlerObj->IncreaseForgotLockCounter();		// increase counter that keeps track of number of times user forgot to lock computer when leaving his/her workplace
 			}
 			else
 			{

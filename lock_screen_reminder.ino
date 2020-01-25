@@ -2,13 +2,11 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include "Core.h"
 #include "LightSensor.h"
 #include "DistanceSensor.h"
 #include "StateRegisterHandler.h"
 #include "Actuator.h"
 #include "Timer.h"
-#include "Core.h"
 
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -109,7 +107,7 @@ void loop() {
     static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);     // = (.., number of led alarm loops, time in milliseconds between each led flash, .., number of buzzer alarm loops, time in milliseconds between each sound alarm, setting which alarm types that are active, ..)
     static Timer timer(10000, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
 
-    actuator.AlarmActivationHandler();  // check if any alarm should be activated and if an alarm should be activated it handles activation and lenght of alarm signals
+    actuator.AlarmActivationHandler();  // check if any alarm should be activated and if any alarm should be activated. it handles activation and lenght of alarm signals
 
     // check workplace according a preset time interval set by 'time interval 1' variable
     unsigned long currentMillis = millis();
