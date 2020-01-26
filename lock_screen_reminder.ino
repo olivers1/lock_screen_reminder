@@ -1,19 +1,18 @@
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include "LightSensor.h"
 #include "DistanceSensor.h"
 #include "StateRegisterHandler.h"
 #include "Actuator.h"
 #include "Timer.h"
 
-
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels
 #define SCREEN_HEIGHT   64      // OLED display height, in pixels
 #define OLED_RESET      4       // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);   // instantiate display object
 
 // I/O-pins
 #define trigPin                 9
@@ -96,6 +95,7 @@ operator^=(States& x, States y)
 
 void setup() {
     InitializeDevices();
+    PermanentTextToDisplay();
 }
 
 
@@ -117,6 +117,7 @@ void loop() {
 
         stateRegister.CheckWorkplace();     // check workplace and update flags in state register if workplace is empty, external monitor is turned on etc.
         timer.TimerActivationHandler();     // activate timer if certain flags in state register is set
+        PrintVariablesToDisplay(&stateRegister);     // update display with latest variable values
     }
 }
 
@@ -142,4 +143,43 @@ void InitializeDevices()
     }
     display.clearDisplay();     // clear display
     display.display();          // execute command
+}
+
+void PermanentTextToDisplay()
+{
+    // print text to display
+    display.setTextSize(1);   // font size
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);  // coordinates (x, y) where text should be printed
+    display.print("Lock Screen Counter");
+
+    display.setCursor(0, 25);  // coordinates (x, y) where text should be printed
+    display.print("Occations:");
+
+    display.setCursor(0, 50);  // coordinates (x, y) where text should be printed
+    display.print("Elapsed Time:");
+    display.display();
+}
+
+void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
+{
+    // print occation counter to display
+    display.fillRect(85, 20, 30, 20, BLACK);    // clear any redundant digits
+    display.display();  // execute command
+    delay(1);
+    display.setTextSize(2);   // font size
+    display.setCursor(85, 20);  // coordinates (x, y) where text should be printed
+    display.setTextColor(WHITE);    // set text colour
+    display.print(stateRegisterHandlerObj->GetForgotLockCnt());
+    display.display();  // execute command
+
+    // print elapsed time to display
+    display.setTextSize(1);   // font size
+    display.fillRect(85, 50, 50, 10, BLACK);    // clear any redundant digits
+    display.display();  // execute command
+    delay(1);
+    display.setCursor(85, 50);  // coordinates (x, y) where text should be printed
+    display.setTextColor(WHITE);    // set text colour
+    display.print(stateRegisterHandlerObj->GetElapsedTime());
+    display.display();  // execute command
 }
