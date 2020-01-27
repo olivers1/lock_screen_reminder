@@ -36,7 +36,8 @@ public:
 	StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
-	bool CheckFlagStateRegister(States); 
+	bool CheckFlagStateRegister(States);
+	byte& GetStateRegister();
 	void CheckWorkplace();
 	byte& GetForgotLockCnt();
 	long& GetElapsedTime();

@@ -1,13 +1,13 @@
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include "LightSensor.h"
 #include "DistanceSensor.h"
 #include "StateRegisterHandler.h"
 #include "Actuator.h"
 #include "Timer.h"
 
-#include <SPI.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define SCREEN_WIDTH    128     // OLED display width, in pixels
 #define SCREEN_HEIGHT   64      // OLED display height, in pixels
@@ -93,6 +93,7 @@ operator^=(States& x, States y)
 }
 */
 
+
 void setup() {
     InitializeDevices();
     PermanentTextToDisplay();
@@ -153,33 +154,44 @@ void PermanentTextToDisplay()
     display.setCursor(0, 0);  // coordinates (x, y) where text should be printed
     display.print("Lock Screen Counter");
 
-    display.setCursor(0, 25);  // coordinates (x, y) where text should be printed
+    display.setCursor(0, 26);  // coordinates (x, y) where text should be printed
     display.print("Occations:");
 
-    display.setCursor(0, 50);  // coordinates (x, y) where text should be printed
+    display.setCursor(0, 42);  // coordinates (x, y) where text should be printed
     display.print("Elapsed Time:");
+
+    display.setCursor(0, 55);  // coordinates (x, y) where text should be printed
+    display.print("State Reg.:");
     display.display();
 }
 
 void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
 {
     // print occation counter to display
-    display.fillRect(85, 20, 30, 20, BLACK);    // clear any redundant digits
+    display.fillRect(85, 18, 30, 20, BLACK);    // clear any redundant digits
     display.display();  // execute command
     delay(1);
     display.setTextSize(2);   // font size
-    display.setCursor(85, 20);  // coordinates (x, y) where text should be printed
+    display.setCursor(85, 18);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetForgotLockCnt());
-    display.display();  // execute command
 
     // print elapsed time to display
     display.setTextSize(1);   // font size
-    display.fillRect(85, 50, 50, 10, BLACK);    // clear any redundant digits
+    display.fillRect(85, 42, 50, 10, BLACK);    // clear any redundant digits
     display.display();  // execute command
     delay(1);
-    display.setCursor(85, 50);  // coordinates (x, y) where text should be printed
+    display.setCursor(85, 42);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetElapsedTime());
+
+    // print state register (flag register) to display
+    display.setTextSize(1);   // font size
+    display.fillRect(75, 55, 70, 10, BLACK);    // clear any redundant digits
+    display.display();  // execute command
+    delay(1);
+    display.setCursor(75, 55);  // coordinates (x, y) where text should be printed
+    display.setTextColor(WHITE);    // set text colour
+    display.print(stateRegisterHandlerObj->GetStateRegister(), BIN);
     display.display();  // execute command
 }

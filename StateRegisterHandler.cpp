@@ -29,6 +29,11 @@ bool StateRegisterHandler::CheckFlagStateRegister(States flag)
 	return m_stateRegister & flag;
 }
 
+byte& StateRegisterHandler::GetStateRegister()
+{
+	return m_stateRegister;
+}
+
 void StateRegisterHandler::CheckWorkplace()
 {
 	// check if workplace is empty and update stateRegister accordingly
