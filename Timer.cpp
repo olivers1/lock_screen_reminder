@@ -7,12 +7,17 @@ Timer::Timer(const unsigned long timerPeriod, StateRegisterHandler* stateRegiste
 }
 
 
-void Timer::ActivateTimer()
+void Timer::StartTimer()
 {
-	m_timeNow = millis();	// store current time
 	m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_ENABLED);	// set 'timer enabled' flag to indicate timer is running
+	m_timeNow = millis();	// store current time
 }
 
+void Timer::AbortTimer()
+{
+	m_stateRegisterHandlerObj->ClearFlagStateRegister(m_stateRegisterHandlerObj->TIMER_ENABLED);	// set 'timer enabled' flag to indicate timer is running
+	m_timeNow = 0;	// reset timer
+}
 
 long Timer::TimeLeft(bool inSeconds)
 {
@@ -47,7 +52,7 @@ void Timer::TimerActivationHandler()
 		if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->TIMER_ENABLED)))
 		{
 			// no, start timer
-			ActivateTimer();
+			StartTimer();
 		}
 		else
 		{
@@ -55,15 +60,24 @@ void Timer::TimerActivationHandler()
 			if (TimeLeft(false) <= 0)
 			{
 				// yes, timer is finished
-				m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);		// set 'timer finished' flag
 				m_stateRegisterHandlerObj->IncreaseForgotLockCounter();		// increase counter that keeps track of number of times user forgot to lock computer when leaving his/her workplace
+				m_stateRegisterHandlerObj->SetFlagStateRegister(m_stateRegisterHandlerObj->TIMER_FINISHED);		// set 'timer finished' flag
 			}
 			else
 			{
+				// timer is still counting print current time
 				Serial.print("timeLeft: ");
 				Serial.println(TimeLeft(true));
 			}
 		}
 	}
-
+	else
+	{
+		// check if user is back at his/her workplace or external monitor is turned off?
+		if (!(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->WORKPLACE_EMPTY)) || !(m_stateRegisterHandlerObj->CheckFlagStateRegister(m_stateRegisterHandlerObj->MONITOR_ON)))
+		{
+			// yes, abort timer
+			AbortTimer();
+		}
+	}
 }

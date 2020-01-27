@@ -55,6 +55,7 @@ void StateRegisterHandler::CheckWorkplace()
 		{
 			m_distanceBelowCnt = 0;		// reset counter
 			ClearFlagStateRegister(WORKPLACE_EMPTY);
+			ClearFlagStateRegister(MONITOR_ON);
 			ClearFlagStateRegister(ALARM_ENABLED);	// clear 'alarm enabled' flag in state register
 			SetFlagStateRegister(WORKPLACE_CHECK_ENABLED);	// set 'workplace check' flag to enable workplace check when the workplace has been confirmed to be reoccupied after an alarm has been trigged
 			m_lightBelowCnt = 0;	// clear counter
@@ -87,6 +88,7 @@ void StateRegisterHandler::CheckWorkplace()
 				// monitor is turned off
 				m_lightAboveCnt = 0;	// reset counter
 				ClearFlagStateRegister(MONITOR_ON);		// clear flag in state register
+				ClearFlagStateRegister(WORKPLACE_EMPTY);
 				ClearFlagStateRegister(ALARM_ENABLED);	// clear 'alarm enabled' flag in state register
 			}
 		}
@@ -131,4 +133,4 @@ void StateRegisterHandler::IncreaseForgotLockCounter()
 	{
 		m_toggle = false;
 	}
-}
+} 
