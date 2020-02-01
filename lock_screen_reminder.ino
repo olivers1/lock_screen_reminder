@@ -157,7 +157,7 @@ void PermanentTextToDisplay()
     display.setCursor(0, 26);  // coordinates (x, y) where text should be printed
     display.print("Occations:");
 
-    display.setCursor(0, 42);  // coordinates (x, y) where text should be printed
+    display.setCursor(0, 41);  // coordinates (x, y) where text should be printed
     display.print("Elapsed Time:");
 
     display.setCursor(0, 55);  // coordinates (x, y) where text should be printed
@@ -170,7 +170,7 @@ void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
     // print occation counter to display
     display.fillRect(85, 18, 30, 20, BLACK);    // clear any redundant digits
     display.display();  // execute command
-    delay(1);
+    
     display.setTextSize(2);   // font size
     display.setCursor(85, 18);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
@@ -178,20 +178,26 @@ void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
 
     // print elapsed time to display
     display.setTextSize(1);   // font size
-    display.fillRect(85, 42, 50, 10, BLACK);    // clear any redundant digits
+    display.fillRect(85, 41, 50, 10, BLACK);    // clear any redundant digits
     display.display();  // execute command
-    delay(1);
-    display.setCursor(85, 42);  // coordinates (x, y) where text should be printed
+    
+    display.setCursor(85, 41);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetElapsedTime());
 
     // print state register (flag register) to display
     display.setTextSize(1);   // font size
-    display.fillRect(75, 55, 70, 10, BLACK);    // clear any redundant digits
-    display.display();  // execute command
-    delay(1);
-    display.setCursor(75, 55);  // coordinates (x, y) where text should be printed
-    display.setTextColor(WHITE);    // set text colour
-    display.print(stateRegisterHandlerObj->GetStateRegister(), BIN);
-    display.display();  // execute command
+
+    int i = 0;
+    for(int b = 7; b >= 0; b--, i++)
+    {
+      display.fillRect(75 + 6 * i, 55, 6, 10, BLACK);    // clear any redundant digits. =(x, y, left upper corner coordinate, width, height, colour)
+      display.display();  // execute command
+
+      // print from whole binary number MSB to LSB
+      display.setTextColor(WHITE);    // set text colour
+      display.setCursor((75 + 6 * i), 55);   // coordinates (x, y) where text should be printed
+      display.print(bitRead(stateRegisterHandlerObj->GetStateRegister(), b));
+      display.display();
+    }
 }

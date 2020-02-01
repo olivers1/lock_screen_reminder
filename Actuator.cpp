@@ -10,7 +10,7 @@ Actuator::Actuator(const byte ledLightPin, const byte nLedAlarmLoops, const unsi
 	m_alarmTypeSelectCopy = m_alarmTypeSelect;	// store a copy of initialized value
 
 	// catch any faulty parameter input
-	if (ledAlarmTimePeriod > 1000 || buzzerAlarmTimePeriod > 300 || (alarmTypeSelect > 3))
+	if (ledAlarmTimePeriod > 1000 /*|| buzzerAlarmTimePeriod > 300*/ || (alarmTypeSelect > 3))
 	{
 		Serial.println("Actuator object initializing failed");
 		if (ledAlarmTimePeriod > 1000)
