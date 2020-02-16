@@ -22,7 +22,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);   // i
 #define LIGHT_THRESHOLD         18
 #define TIMER_PERIOD            10000
 #define nChecks                 5
-#define buzzerPin               6
+#define buzzerPin               5
 #define ledPin                  11
 
 const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
