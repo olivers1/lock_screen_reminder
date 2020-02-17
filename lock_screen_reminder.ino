@@ -20,7 +20,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);   // i
 #define trigPin2                6
 #define echoPin2                8
 #define DISTANCE_THRESHOLD      10
-#define HEIGHT_THRESHOLD        170
+#define HEIGHT_THRESHOLD        120     // distance mesured from top of work desk to ceiling
 #define lightSensorPin          A5
 #define LIGHT_THRESHOLD         18
 #define TIMER_PERIOD            10000
@@ -43,7 +43,7 @@ void loop() {
     static DistanceSensor distanceSensor1(trigPin1, echoPin1, DISTANCE_THRESHOLD);
     static DistanceSensor distanceSensor2(trigPin2, echoPin2, HEIGHT_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
-    static StateRegisterHandler stateRegister(&distanceSensor1, 5, &distanceSensor2, 5, &lightSensor, 5);   // = (.., number of measurements in a row to confirm 'empty workplace', .., number of measurements in a row to confirm 'user is standing', .., number of measurements in a row to confirm 'external monitor on', ..)
+    static StateRegisterHandler stateRegister(&distanceSensor1, 5, &distanceSensor2, 5, &lightSensor, 5);   // = (.., number of measurements in a row to confirm 'empty workplace', .., number of measurements in a row to confirm 'user work desk is elevated', .., number of measurements in a row to confirm 'external monitor on', ..)
     static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);     // = (.., number of led alarm loops, time in milliseconds between each led flash, .., number of buzzer alarm loops, time in milliseconds between each sound alarm, setting which alarm types that are active, ..)
     static Timer timer(10000, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
 

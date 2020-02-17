@@ -19,6 +19,10 @@ public:
 		BUZZER_ALARM_ON = 1 << 7,			// binary 1000'0000
 		MASK = B11111111					// binary 1111'1111
 	};
+	enum StatesExtended : byte {
+		RESET_EXTENDED = 0,
+		WORK_DESK_ELEVATED = 1 << 0		// binary 0000'0001
+	};
 private:
 	DistanceSensor* m_distanceSensorObj1;
 	const byte m_nDistanceChecks;
@@ -34,6 +38,7 @@ private:
 	byte m_lightAboveCnt;
 	
 	byte m_stateRegister;
+	byte m_stateRegisterExtended;
 	byte m_forgotLockCnt;
 	long m_elapsedTime;
 	bool m_toggle;
@@ -44,6 +49,10 @@ public:
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States);
 	byte& GetStateRegister();
+	void SetFlagStateRegisterExtended(StatesExtended);
+	void ClearFlagStateRegisterExtended(StatesExtended);
+	bool CheckFlagStateRegisterExtended(StatesExtended);
+	byte& GetStateRegisterExtended();
 	void CheckWorkplace();
 	byte& GetForgotLockCnt();
 	long& GetElapsedTime();

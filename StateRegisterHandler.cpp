@@ -10,6 +10,7 @@ StateRegisterHandler::StateRegisterHandler(DistanceSensor* distanceSensorObj1, c
 	m_lightBelowCnt = 0;
 	m_lightAboveCnt = 0;
 	m_stateRegister = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
+	m_stateRegisterExtended = RESET_EXTENDED;
 	m_forgotLockCnt = 0;
 	m_elapsedTime = 0;
 	m_toggle = false;
@@ -36,6 +37,26 @@ byte& StateRegisterHandler::GetStateRegister()
 	return m_stateRegister;
 }
 
+void StateRegisterHandler::SetFlagStateRegisterExtended(StatesExtended flag)
+{
+	m_stateRegisterExtended |= flag;
+}
+
+void StateRegisterHandler::ClearFlagStateRegisterExtended(StatesExtended flag)
+{
+	m_stateRegisterExtended &= (MASK ^ flag);
+}
+
+bool StateRegisterHandler::CheckFlagStateRegisterExtended(StatesExtended flag)
+{
+	return m_stateRegisterExtended & flag;
+}
+
+byte& StateRegisterHandler::GetStateRegisterExtended()
+{
+	return m_stateRegisterExtended;
+}
+
 void StateRegisterHandler::CheckWorkplace()
 {
 	// check if workplace is empty and update stateRegister accordingly
@@ -49,7 +70,7 @@ void StateRegisterHandler::CheckWorkplace()
 			if (m_distanceAboveCnt == m_nDistanceChecks)
 			{
 				m_distanceAboveCnt = 0;		// reset counter
-				SetFlagStateRegister(WORKPLACE_EMPTY); 
+				SetFlagStateRegister(WORKPLACE_EMPTY);	// set flag bit to indicate 'workplace is empty'
 			}
 		}
 	}
@@ -66,6 +87,30 @@ void StateRegisterHandler::CheckWorkplace()
 			ClearFlagStateRegister(ALARM_ENABLED);	// clear 'alarm enabled' flag in state register
 			SetFlagStateRegister(WORKPLACE_CHECK_ENABLED);	// set 'workplace check' flag to enable workplace check when the workplace has been confirmed to be reoccupied after an alarm has been trigged
 			m_lightBelowCnt = 0;	// clear counter
+		}
+	}
+
+	// check work desk height to determine if desk is elevated or not
+	if (!(m_distanceSensorObj2->GetDistanceStatus()))
+	{
+		// work desk is elevated, user is assumed to be standing
+		m_heightBelowCnt++;
+		m_heightAboveCnt = 0;
+		if (m_heightBelowCnt == m_nHeightChecks)
+		{
+			m_heightBelowCnt = 0;
+			SetFlagStateRegisterExtended(WORK_DESK_ELEVATED);
+		}
+	}
+	else
+	{
+		// work desk is not elevated, user is assumed to be sitting
+		m_heightAboveCnt++;
+		m_heightBelowCnt = 0;
+		if(m_heightAboveCnt == m_nHeightChecks)
+		{
+			m_heightAboveCnt = 0;
+			ClearFlagStateRegisterExtended(WORK_DESK_ELEVATED);
 		}
 	}
 
@@ -109,6 +154,12 @@ void StateRegisterHandler::CheckWorkplace()
 
 	Serial.print("m_distanceBelowCnt: ");
 	Serial.println(m_distanceBelowCnt);
+
+	Serial.print("m_heightAboveCnt: ");
+	Serial.println(m_heightAboveCnt);
+
+	Serial.print("m_heightBelowCnt: ");
+	Serial.println(m_heightBelowCnt);
 
 	Serial.print("m_lightBelowCnt: ");
 	Serial.println(m_lightBelowCnt);
