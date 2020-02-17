@@ -20,20 +20,26 @@ public:
 		MASK = B11111111					// binary 1111'1111
 	};
 private:
+	DistanceSensor* m_distanceSensorObj1;
+	const byte m_nDistanceChecks;
 	byte m_distanceAboveCnt;
 	byte m_distanceBelowCnt;
-	const byte m_nDistanceChecks;
+	DistanceSensor* m_distanceSensorObj2;
+	const byte m_nHeightChecks;
+	unsigned int m_heightAboveCnt;
+	unsigned int m_heightBelowCnt;
+	LightSensor* m_lightSensorObj;
+	const byte m_nLightChecks;
 	byte m_lightBelowCnt;
 	byte m_lightAboveCnt;
-	const byte m_nLightChecks;
+	
 	byte m_stateRegister;
-	DistanceSensor* m_distanceSensorObj;
-	LightSensor* m_lightSensorObj;
 	byte m_forgotLockCnt;
 	long m_elapsedTime;
 	bool m_toggle;
 public:
-	StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
+	StateRegisterHandler(DistanceSensor* distanceSensorObj1, const byte nDistanceChecks, DistanceSensor* distanceSensorObj2, const byte nHeightChecks, LightSensor* lightSensorObj, const byte nLightChecks);
+	//StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States);

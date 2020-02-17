@@ -1,10 +1,12 @@
 #include "StateRegisterHandler.h"
 
-StateRegisterHandler::StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj)
-	: m_nDistanceChecks(nDistanceChecks), m_nLightChecks(nLightChecks), m_distanceSensorObj(distanceSensorObj), m_lightSensorObj(lightSensorObj)
+StateRegisterHandler::StateRegisterHandler(DistanceSensor* distanceSensorObj1, const byte nDistanceChecks, DistanceSensor* distanceSensorObj2, const byte nHeightChecks, LightSensor* lightSensorObj, const byte nLightChecks)
+	: m_distanceSensorObj1(distanceSensorObj1), m_nDistanceChecks(nDistanceChecks), m_distanceSensorObj2(distanceSensorObj2), m_nHeightChecks(nHeightChecks), m_lightSensorObj(lightSensorObj), m_nLightChecks(nLightChecks)
 {
 	m_distanceAboveCnt = 0;
 	m_distanceBelowCnt = 0;
+	m_heightAboveCnt = 0;
+	m_heightBelowCnt = 0;
 	m_lightBelowCnt = 0;
 	m_lightAboveCnt = 0;
 	m_stateRegister = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
@@ -37,7 +39,7 @@ byte& StateRegisterHandler::GetStateRegister()
 void StateRegisterHandler::CheckWorkplace()
 {
 	// check if workplace is empty and update stateRegister accordingly
-	if (m_distanceSensorObj->GetDistanceStatus())
+	if (m_distanceSensorObj1->GetDistanceStatus())
 	{
 		if (CheckFlagStateRegister(WORKPLACE_CHECK_ENABLED))
 		{

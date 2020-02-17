@@ -15,9 +15,12 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);   // instantiate display object
 
 // I/O-pins
-#define trigPin                 9
-#define echoPin                 10
+#define trigPin1                9
+#define echoPin1                10
+#define trigPin2                6
+#define echoPin2                8
 #define DISTANCE_THRESHOLD      10
+#define HEIGHT_THRESHOLD        170
 #define lightSensorPin          A5
 #define LIGHT_THRESHOLD         18
 #define TIMER_PERIOD            10000
@@ -37,9 +40,10 @@ void setup() {
 
 void loop() {
     // instantiate senor objects
-    static DistanceSensor distanceSensor(trigPin, echoPin, DISTANCE_THRESHOLD);
+    static DistanceSensor distanceSensor1(trigPin1, echoPin1, DISTANCE_THRESHOLD);
+    static DistanceSensor distanceSensor2(trigPin2, echoPin2, HEIGHT_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
-    static StateRegisterHandler stateRegister(5, 5, &distanceSensor, &lightSensor);    // = (number of measurements in a row to confirm 'empty workplace', external monitor, .., ..)
+    static StateRegisterHandler stateRegister(&distanceSensor1, 5, &distanceSensor2, 5, &lightSensor, 5);   // = (.., number of measurements in a row to confirm 'empty workplace', .., number of measurements in a row to confirm 'user is standing', .., number of measurements in a row to confirm 'external monitor on', ..)
     static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);     // = (.., number of led alarm loops, time in milliseconds between each led flash, .., number of buzzer alarm loops, time in milliseconds between each sound alarm, setting which alarm types that are active, ..)
     static Timer timer(10000, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
 
@@ -65,8 +69,10 @@ void InitializeDevices()
     unsigned long previousMillis = 0;
 
     // I/O-pins
-    pinMode(trigPin, OUTPUT);
-    pinMode(echoPin, INPUT);
+    pinMode(trigPin1, OUTPUT);
+    pinMode(echoPin1, INPUT);
+    pinMode(trigPin2, OUTPUT);
+    pinMode(echoPin2, INPUT);
     pinMode(lightSensorPin, INPUT);
     pinMode(buzzerPin, OUTPUT);
     pinMode(ledPin, OUTPUT);
