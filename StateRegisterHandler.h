@@ -22,6 +22,7 @@ public:
 	enum StatesExtended : byte {
 		RESET_EXTENDED = 0,
 		WORK_DESK_ELEVATED = 1 << 0		// binary 0000'0001
+		// room for 7 more state enums
 	};
 private:
 	DistanceSensor* m_distanceSensorObj1;
@@ -36,15 +37,17 @@ private:
 	const byte m_nLightChecks;
 	byte m_lightBelowCnt;
 	byte m_lightAboveCnt;
-	
 	byte m_stateRegister;
 	byte m_stateRegisterExtended;
 	byte m_forgotLockCnt;
+	byte m_deskElevatedCnt;
 	long m_elapsedTime;
-	bool m_toggle;
+	bool m_toggle1;
+	bool m_toggle2;
+
+	void IncreaseDeskElevatedCounter();
 public:
 	StateRegisterHandler(DistanceSensor* distanceSensorObj1, const byte nDistanceChecks, DistanceSensor* distanceSensorObj2, const byte nHeightChecks, LightSensor* lightSensorObj, const byte nLightChecks);
-	//StateRegisterHandler(const byte nDistanceChecks, const byte nLightChecks, DistanceSensor* distanceSensorObj, LightSensor* lightSensorObj);
 	void SetFlagStateRegister(States);
 	void ClearFlagStateRegister(States);
 	bool CheckFlagStateRegister(States);
@@ -57,4 +60,5 @@ public:
 	byte& GetForgotLockCnt();
 	long& GetElapsedTime();
 	void IncreaseForgotLockCounter();
+	byte& GetDeskElevatedCnt();
 };

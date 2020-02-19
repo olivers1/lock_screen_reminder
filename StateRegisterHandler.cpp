@@ -12,10 +12,24 @@ StateRegisterHandler::StateRegisterHandler(DistanceSensor* distanceSensorObj1, c
 	m_stateRegister = WORKPLACE_CHECK_ENABLED;	// enable check of workplace to determine if it is empty
 	m_stateRegisterExtended = RESET_EXTENDED;
 	m_forgotLockCnt = 0;
+	m_deskElevatedCnt = 0;
 	m_elapsedTime = 0;
-	m_toggle = false;
+	m_toggle1 = false;
+	m_toggle2 = false;
 }
 
+void StateRegisterHandler::IncreaseDeskElevatedCounter()
+{
+	if (CheckFlagStateRegisterExtended(WORK_DESK_ELEVATED) && m_toggle2 == false)
+	{
+		m_deskElevatedCnt++;
+		m_toggle2 = true;
+	}
+	else if (!(CheckFlagStateRegisterExtended(WORK_DESK_ELEVATED) && m_toggle2 == true))
+	{
+		m_toggle2 = false;
+	}
+}
 
 void StateRegisterHandler::SetFlagStateRegister(States flag)
 {
@@ -182,13 +196,18 @@ long& StateRegisterHandler::GetElapsedTime()
 
 void StateRegisterHandler::IncreaseForgotLockCounter()
 {
-	if (CheckFlagStateRegister(TIMER_FINISHED) && m_toggle == false)
+	if (CheckFlagStateRegister(TIMER_FINISHED) && m_toggle1 == false)
 	{
 		m_forgotLockCnt++;	// increase counter by 1
-		m_toggle = true;	// set toggle variable to true to only count when 'timer finished' flag in state register changes to high
+		m_toggle1 = true;	// set toggle variable to true to only count the occation when 'timer finished' flag in state register changes to high
 	}
-	else if (!(CheckFlagStateRegister(TIMER_FINISHED) && m_toggle == true))
+	else if (!(CheckFlagStateRegister(TIMER_FINISHED) && m_toggle1 == true))
 	{
-		m_toggle = false;
+		m_toggle1 = false;
 	}
-} 
+}  
+
+byte& StateRegisterHandler::GetDeskElevatedCnt()
+{
+	return m_deskElevatedCnt;
+}
