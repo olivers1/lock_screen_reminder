@@ -127,6 +127,7 @@ void StateRegisterHandler::CheckWorkplace()
 			ClearFlagStateRegisterExtended(WORK_DESK_ELEVATED);
 		}
 	}
+	IncreaseDeskElevatedCounter();	// run increase counter function which in itself has a logics built in to only increase counter once for each occation when desk is raised
 
 	// check if 'workplace empty' flag is set?
 	if (StateRegisterHandler::CheckFlagStateRegister(WORKPLACE_EMPTY))
@@ -175,11 +176,14 @@ void StateRegisterHandler::CheckWorkplace()
 	Serial.print("m_heightBelowCnt: ");
 	Serial.println(m_heightBelowCnt);
 
-	Serial.print("m_lightBelowCnt: ");
-	Serial.println(m_lightBelowCnt);
+	Serial.print("m_deskElevatedCnt: ");
+	Serial.println(m_deskElevatedCnt);
 
-	Serial.print("m_lightAboveCnt: ");
-	Serial.println(m_lightAboveCnt);
+	//Serial.print("m_lightBelowCnt: ");
+	//Serial.println(m_lightBelowCnt);
+
+	//Serial.print("m_lightAboveCnt: ");
+	//Serial.println(m_lightAboveCnt);
 }
 
 byte& StateRegisterHandler::GetForgotLockCnt()

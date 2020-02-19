@@ -92,11 +92,12 @@ void PermanentTextToDisplay()
     // print text to display
     display.setTextSize(1);   // font size
     display.setTextColor(WHITE);
-    display.setCursor(0, 0);  // coordinates (x, y) where text should be printed
-    display.print("Lock Screen Counter");
 
-    display.setCursor(0, 26);  // coordinates (x, y) where text should be printed
-    display.print("Occations:");
+    display.setCursor(0, 8);  // coordinates (x, y) where text should be printed
+    display.print("Desk Elevated:");
+
+    display.setCursor(0, 27);  // coordinates (x, y) where text should be printed
+    display.print("Left Unlocked:");
 
     display.setCursor(0, 41);  // coordinates (x, y) where text should be printed
     display.print("Elapsed Time:");
@@ -108,21 +109,31 @@ void PermanentTextToDisplay()
 
 void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
 {
-    // print occation counter to display
-    display.fillRect(85, 18, 30, 20, BLACK);    // clear any redundant digits
+    // print number of occations desk was elevated, to display
+    display.fillRect(90, 1, 30, 20, BLACK);    // clear any redundant digits
+    display.display();  // execute command
+
+    display.setTextSize(2);     // font size
+    display.setCursor(90, 1);   // coordinates (x, y) where text should be printed
+    display.setTextColor(WHITE);    // set text colour
+    display.print(stateRegisterHandlerObj->GetDeskElevatedCnt());
+
+
+    // print number of occations desk was left with computer unlocked counter, to display
+    display.fillRect(90, 20, 30, 20, BLACK);    // clear any redundant digits
     display.display();  // execute command
     
     display.setTextSize(2);   // font size
-    display.setCursor(85, 18);  // coordinates (x, y) where text should be printed
+    display.setCursor(90, 20);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetForgotLockCnt());
 
     // print elapsed time to display
     display.setTextSize(1);   // font size
-    display.fillRect(85, 41, 50, 10, BLACK);    // clear any redundant digits
+    display.fillRect(90, 41, 50, 10, BLACK);    // clear any redundant digits
     display.display();  // execute command
     
-    display.setCursor(85, 41);  // coordinates (x, y) where text should be printed
+    display.setCursor(90, 41);  // coordinates (x, y) where text should be printed
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetElapsedTime());
 
