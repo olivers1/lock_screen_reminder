@@ -128,7 +128,7 @@ void PrintVariablesToDisplay(StateRegisterHandler* stateRegisterHandlerObj)
     display.setTextColor(WHITE);    // set text colour
     display.print(stateRegisterHandlerObj->GetForgotLockCnt());
 
-    // print elapsed time to display
+    // print elapsed time, to display
     display.setTextSize(1);   // font size
     display.fillRect(90, 41, 50, 10, BLACK);    // clear any redundant digits
     display.display();  // execute command
