@@ -170,6 +170,15 @@ void StateRegisterHandler::CheckWorkplace()
 	Serial.print("m_distanceBelowCnt: ");
 	Serial.println(m_distanceBelowCnt);
 
+	Serial.print("lightValue: ");
+	Serial.println(m_lightSensorObj->GetLightValue());
+
+	Serial.print("m_lightBelowCnt: ");
+	Serial.println(m_lightBelowCnt);
+
+	Serial.print("m_lightAboveCnt: ");
+	Serial.println(m_lightAboveCnt);
+
 	Serial.print("m_heightAboveCnt: ");
 	Serial.println(m_heightAboveCnt);
 
@@ -178,12 +187,6 @@ void StateRegisterHandler::CheckWorkplace()
 
 	Serial.print("m_deskElevatedCnt: ");
 	Serial.println(m_deskElevatedCnt);
-
-	//Serial.print("m_lightBelowCnt: ");
-	//Serial.println(m_lightBelowCnt);
-
-	//Serial.print("m_lightAboveCnt: ");
-	//Serial.println(m_lightAboveCnt);
 }
 
 byte& StateRegisterHandler::GetForgotLockCnt()

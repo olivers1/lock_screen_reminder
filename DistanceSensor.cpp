@@ -15,7 +15,7 @@ unsigned int DistanceSensor::ReadDistance()
     return distanceValue;
 }
 
-bool DistanceSensor::GetDistanceStatus()
+bool& DistanceSensor::GetDistanceStatus()
 {
     unsigned int distanceValue = DistanceSensor::ReadDistance();
     if (distanceValue > m_distanceThreshold)

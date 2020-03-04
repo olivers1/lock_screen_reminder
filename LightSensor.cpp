@@ -8,7 +8,7 @@ unsigned int LightSensor::ReadLight()
 	return analogRead(m_lightSensorPin);
 }
 
-bool LightSensor::GetLightStatus()
+bool& LightSensor::GetLightStatus()
 {
 	unsigned int lightValue = LightSensor::ReadLight();
 	if (lightValue < m_lightThreshold)

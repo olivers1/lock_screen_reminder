@@ -19,14 +19,19 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);   // i
 #define echoPin1                10
 #define trigPin2                6
 #define echoPin2                8
-#define DISTANCE_THRESHOLD      10
-#define HEIGHT_THRESHOLD        120     // distance mesured from top of work desk to ceiling
 #define lightSensorPin          A5
-#define LIGHT_THRESHOLD         18
-#define TIMER_PERIOD            10000
-#define nChecks                 5
 #define buzzerPin               5
 #define ledPin                  11
+#define DISTANCE_THRESHOLD      60      // in cm
+#define HEIGHT_THRESHOLD        120     // distance in cm, measured from top of work desk to the ceiling. Distance below this value is counted as raised work desk
+#define LIGHT_THRESHOLD         650
+#define TIMER_PERIOD            10000   // in milliseconds
+#define N_CHECKS                5
+#define N_LED_ALARM_LOOPS       2 
+#define LED_TIME_PERIOD         900     // in milliseconds
+#define N_BUZZER_ALARM_LOOPS    10  
+#define BUZZER_TIME_PERIOD      20     // in milliseconds
+#define ALARM_TYPE              2       // 0 = no alarm, 1 = led light alarm, 2 = buzzer alarm, 3 = both led light and buzzer alarm
 
 const unsigned int TIME_INTERVAL_1 = 1000;   // interval for how often (milliseconds) program should loop
 unsigned long previousMillis = 0;  
@@ -43,9 +48,9 @@ void loop() {
     static DistanceSensor distanceSensor1(trigPin1, echoPin1, DISTANCE_THRESHOLD);
     static DistanceSensor distanceSensor2(trigPin2, echoPin2, HEIGHT_THRESHOLD);
     static LightSensor lightSensor(lightSensorPin, LIGHT_THRESHOLD);
-    static StateRegisterHandler stateRegister(&distanceSensor1, 5, &distanceSensor2, 5, &lightSensor, 5);   // = (.., number of measurements in a row to confirm 'empty workplace', .., number of measurements in a row to confirm 'user work desk is elevated', .., number of measurements in a row to confirm 'external monitor on', ..)
-    static Actuator actuator(ledPin, 2, 900, buzzerPin, 3, 30, 3, &stateRegister);     // = (.., number of led alarm loops, time in milliseconds between each led flash, .., number of buzzer alarm loops, time in milliseconds between each sound alarm, setting which alarm types that are active, ..)
-    static Timer timer(10000, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
+    static StateRegisterHandler stateRegister(&distanceSensor1, N_CHECKS, &distanceSensor2, N_CHECKS, &lightSensor, N_CHECKS);   
+    static Actuator actuator(ledPin, N_LED_ALARM_LOOPS, LED_TIME_PERIOD, buzzerPin, N_BUZZER_ALARM_LOOPS, BUZZER_TIME_PERIOD, ALARM_TYPE, &stateRegister);
+    static Timer timer(TIMER_PERIOD, &stateRegister);     // (delay time in milliseconds before activating alarm when requirements are fulfilled, ..)
 
     actuator.AlarmActivationHandler();  // check if any alarm should be activated and if any alarm should be activated. it handles activation and lenght of alarm signals
 

@@ -13,7 +13,7 @@ private:
 	unsigned int ReadDistance();
 public:
 	DistanceSensor(const byte ultrasonicTrigPin, const byte ultrasonicEchoPin, const unsigned int distanceThreshold);
-	bool GetDistanceStatus();
+	bool& GetDistanceStatus();
 	unsigned int GetDistanceValue();
 };
 
